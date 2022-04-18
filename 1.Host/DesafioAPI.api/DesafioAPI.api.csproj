@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\2.Application\DesafioAPI.application\DesafioAPI.application.csproj" />
+    <ProjectReference Include="..\..\3.Domain\DesafioAPI.domain\DesafioAPI.domain.csproj" />
+    <ProjectReference Include="..\..\4.Infra\DesafioAPI.infra\DesafioAPI.infra.csproj" />
+  </ItemGroup>
+
+</Project>

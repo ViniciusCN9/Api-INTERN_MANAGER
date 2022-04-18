@@ -1,0 +1,79 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using DesafioAPI.application.DataTransferObjects;
+using DesafioAPI.application.Interfaces;
+using DesafioAPI.application.Mappers;
+using DesafioAPI.domain.Entities;
+using DesafioAPI.domain.Repositories;
+
+namespace DesafioAPI.application.Services
+{
+    public class AccountService : IAccountService
+    {
+        private readonly IAccountRepository _accountRepository;
+
+        public AccountService(IAccountRepository accountRepository)
+        {
+            _accountRepository = accountRepository;
+        }
+
+        public Task<List<Account>> GetAccounts()
+        {
+            var accounts = _accountRepository.GetAccounts();
+            if (accounts is null)
+                throw new ArgumentException("Nenhum conta encontrada");
+
+            return accounts;
+        }
+
+        public Task<Account> GetByIdAccount(int id)
+        {
+            var account = _accountRepository.GetByIdAccount(id);
+            if (account is null)
+                throw new ArgumentException("Conta não encontrada");
+
+            return account;
+        }
+
+        public Task<Account> PostLogin(string username, string password)
+        {
+            var account = _accountRepository.PostLogin(username, password);
+            if (account is null)
+                throw new ArgumentException("Conta não encontrada");
+
+            return account;
+        }
+
+        public void PostRegister(AccountDto accountDto)
+        {
+            _accountRepository.PostRegister(accountDto.ToDomain());
+        }
+
+        public void PatchByIdAccount(AccountDto accountDto, int id)
+        {
+            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            account.Username = accountDto.Username ?? account.Username;
+            account.Password = accountDto.Password ?? account.Password;
+            account.IsActive = accountDto.IsActive ?? account.IsActive;
+
+            _accountRepository.UpdateAccount();
+        }
+
+        public void PutByIdAccount(AccountDto accountDto, int id)
+        {
+            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            account.Username = accountDto.Username;
+            account.Password = accountDto.Password;
+            account.IsActive = (bool)accountDto.IsActive;
+
+            _accountRepository.UpdateAccount();
+        }
+
+        public void DeleteByIdAccount(int id)
+        {
+            _accountRepository.DeleteByIdAccount(id);
+        }
+    }
+}
