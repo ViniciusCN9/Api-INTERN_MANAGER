@@ -18,19 +18,49 @@ namespace DesafioAPI.infra.Database.Repositories
             _context = context;
         }
 
-        public Task<List<Starter>> GetStarters()
+        public List<Starter> GetStarters()
         {
-            return _context.Starters.Include(e => e.Category).AsNoTracking().ToListAsync();
+            List<Starter> starters;
+            try
+            {
+                starters = _context.Starters.Include(e => e.Category).AsNoTracking().ToList();
+            }
+            catch
+            {
+                starters = null;
+            }
+
+            return starters; 
         }
 
-        public Task<Starter> GetByIdStarter(int Id)
+        public Starter GetByIdStarter(int Id)
         {
-            return _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefaultAsync(e => e.Id == Id);
+            Starter starter;
+            try
+            {
+                starter = _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefault(e => e.Id == Id);
+            }
+            catch
+            {
+                starter = null;
+            }
+
+            return starter;
         }
 
-        public Task<Starter> GetByNameStarter(string name)
+        public Starter GetByNameStarter(string name)
         {
-            return _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefaultAsync(e => e.Name == name);
+            Starter starter;
+            try
+            {
+                starter = _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefault(e => e.Name == name);
+            }
+            catch
+            {
+                starter = null;
+            }
+
+            return starter;
         }
 
         public void PostStarter(Starter starter)

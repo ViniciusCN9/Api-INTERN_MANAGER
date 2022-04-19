@@ -18,19 +18,49 @@ namespace DesafioAPI.infra.Database.Repositories
             _context = context;
         }
 
-        public Task<List<Account>> GetAccounts()
+        public List<Account> GetAccounts()
         {
-            return _context.Accounts.AsNoTracking().ToListAsync();
+            List<Account> accounts;
+            try
+            {
+                accounts = _context.Accounts.AsNoTracking().ToList();
+            }
+            catch
+            {
+                accounts = null;
+            }
+
+            return accounts;
         }
 
-        public Task<Account> GetByIdAccount(int id)
+        public Account GetByIdAccount(int id)
         {
-            return _context.Accounts.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            Account account;
+            try
+            {
+                account = _context.Accounts.AsNoTracking().First(e => e.Id == id);
+            }
+            catch
+            {
+                account = null;
+            }
+            
+            return account;
         }
 
-        public Task<Account> PostLogin(string username, string password)
+        public Account PostLogin(string username, string password)
         {
-            return _context.Accounts.AsNoTracking().FirstOrDefaultAsync(e => e.Username == username && e.Password == password);
+            Account account;
+            try
+            {
+                account = _context.Accounts.AsNoTracking().First(e => e.Username == username && e.Password == password);
+            }
+            catch
+            {
+                account = null;
+            }
+
+            return account;
         }
 
         public void PostRegister(Account account)

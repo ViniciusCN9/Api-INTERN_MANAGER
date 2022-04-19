@@ -18,14 +18,34 @@ namespace DesafioAPI.infra.Database.Repositories
             _context = context;
         }
 
-        public Task<List<Category>> GetCategories()
+        public List<Category> GetCategories()
         {
-            return _context.Categories.AsNoTracking().ToListAsync();
+            List<Category> categories;
+            try
+            {
+                categories = _context.Categories.AsNoTracking().ToList();
+            }
+            catch
+            {
+                categories = null;
+            }
+
+            return categories;
         }
 
-        public Task<Category> GetByIdCategory(int id)
+        public Category GetByIdCategory(int id)
         {
-            return _context.Categories.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
+            Category category;
+            try
+            {
+                category = _context.Categories.AsNoTracking().FirstOrDefault(e => e.Id == id);
+            }
+            catch
+            {
+                category = null;
+            }
+
+            return category;
         }
 
         public void PostCategory(Category category)

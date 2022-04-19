@@ -9,11 +9,11 @@ namespace DesafioAPI.application.Interfaces
 {
     public interface IAccountService
     {
-        Task<List<Account>> GetAccounts();
+        List<Account> GetAccounts();
 
-        Task<Account> GetByIdAccount(int id);
+        Account GetByIdAccount(int id);
 
-        Task<Account> PostLogin(string username, string password);
+        Account PostLogin(string username, string password);
 
         void PostRegister(AccountRegisterDto accountRegisterDto);
 

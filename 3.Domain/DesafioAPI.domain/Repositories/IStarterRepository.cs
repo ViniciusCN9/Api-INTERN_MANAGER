@@ -8,11 +8,11 @@ namespace DesafioAPI.domain.Repositories
 {
     public interface IStarterRepository
     {
-        Task<List<Starter>> GetStarters();
+        List<Starter> GetStarters();
 
-        Task<Starter> GetByIdStarter(int Id);
+        Starter GetByIdStarter(int Id);
 
-        Task<Starter> GetByNameStarter(string name);
+        Starter GetByNameStarter(string name);
 
         void PostStarter(Starter starter);
 

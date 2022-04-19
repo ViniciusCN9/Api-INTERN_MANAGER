@@ -9,9 +9,9 @@ namespace DesafioAPI.application.Interfaces
 {
     public interface ICategoryService
     {
-        Task<List<Category>> GetCategories();
+        List<Category> GetCategories();
 
-        Task<Category> GetByIdCategory(int id);
+        Category GetByIdCategory(int id);
 
         void PostCategory(CategoryDto categoryDto);
 

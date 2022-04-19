@@ -8,9 +8,9 @@ namespace DesafioAPI.domain.Repositories
 {
     public interface ICategoryRepository
     {
-        Task<List<Category>> GetCategories();
+        List<Category> GetCategories();
 
-        Task<Category> GetByIdCategory(int id);
+        Category GetByIdCategory(int id);
 
         void PostCategory(Category category);
 

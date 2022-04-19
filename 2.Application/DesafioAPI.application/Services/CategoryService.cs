@@ -19,7 +19,7 @@ namespace DesafioAPI.application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public Task<List<Category>> GetCategories()
+        public List<Category> GetCategories()
         {
             var categories = _categoryRepository.GetCategories();
             if (categories is null)
@@ -28,7 +28,7 @@ namespace DesafioAPI.application.Services
             return categories;
         }
 
-        public Task<Category> GetByIdCategory(int id)
+        public Category GetByIdCategory(int id)
         {
             var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
@@ -44,7 +44,7 @@ namespace DesafioAPI.application.Services
 
         public void PatchByIdCategory(CategoryDto categoryDto, int id)
         {
-            var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
@@ -57,7 +57,7 @@ namespace DesafioAPI.application.Services
 
         public void PutByIdCategory(CategoryDto categoryDto, int id)
         {
-            var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
@@ -73,7 +73,7 @@ namespace DesafioAPI.application.Services
             if (id < 0)
                 throw new ArgumentException("Id inválido");
                 
-            var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 

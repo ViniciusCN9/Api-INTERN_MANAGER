@@ -9,11 +9,11 @@ namespace DesafioAPI.application.Interfaces
 {
     public interface IStarterService
     {
-        Task<List<Starter>> GetStarters();
+        List<Starter> GetStarters();
 
-        Task<Starter> GetByIdStarter(int id);
+        Starter GetByIdStarter(int id);
 
-        Task<Starter> GetByNameStarter(string name);
+        Starter GetByNameStarter(string name);
 
         void PostStarter(StarterDto starterDto);
 

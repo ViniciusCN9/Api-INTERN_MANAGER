@@ -8,11 +8,11 @@ namespace DesafioAPI.domain.Repositories
 {
     public interface IAccountRepository
     {
-        Task<List<Account>> GetAccounts();
+        List<Account> GetAccounts();
 
-        Task<Account> GetByIdAccount(int id);
+        Account GetByIdAccount(int id);
 
-        Task<Account> PostLogin(string username, string password);
+        Account PostLogin(string username, string password);
 
         void PostRegister(Account account);
 

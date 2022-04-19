@@ -21,7 +21,7 @@ namespace DesafioAPI.application.Services
             _categoryRepository = categoryRepository;
         }
 
-        public Task<List<Starter>> GetStarters()
+        public List<Starter> GetStarters()
         {
             var starters = _starterRepository.GetStarters();
             if (starters is null)
@@ -30,7 +30,7 @@ namespace DesafioAPI.application.Services
             return starters;
         }
 
-        public Task<Starter> GetByIdStarter(int id)
+        public Starter GetByIdStarter(int id)
         {
             var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
@@ -39,7 +39,7 @@ namespace DesafioAPI.application.Services
             return starter;
         }
 
-        public Task<Starter> GetByNameStarter(string name)
+        public Starter GetByNameStarter(string name)
         {
             var starter = _starterRepository.GetByNameStarter(name);
             if (starter is null)
@@ -53,7 +53,7 @@ namespace DesafioAPI.application.Services
             if (_categoryRepository.GetCategories() is null)
                 throw new ArgumentException("Nenhuma categoria cadastrada");
 
-            var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId).GetAwaiter().GetResult();
+            var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
@@ -65,7 +65,7 @@ namespace DesafioAPI.application.Services
 
         public void PatchByIdStarter(StarterDto starterDto, int id)
         {
-            var starter = _starterRepository.GetByIdStarter(id).GetAwaiter().GetResult();
+            var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
 
@@ -76,7 +76,7 @@ namespace DesafioAPI.application.Services
             starter.Photo = starterDto.Photo ?? starter.Photo;
             if (starterDto.CategoryId != 0)
             {
-                var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId).GetAwaiter().GetResult();
+                var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId);
                 if (category is null)
                     throw new ArgumentException("Categoria não encontrada");
 
@@ -88,7 +88,7 @@ namespace DesafioAPI.application.Services
 
         public void PutByIdStarter(StarterDto starterDto, int id)
         {
-            var starter = _starterRepository.GetByIdStarter(id).GetAwaiter().GetResult();
+            var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
 
@@ -99,7 +99,7 @@ namespace DesafioAPI.application.Services
             starter.Photo = starterDto.Photo;
             if (starterDto.CategoryId != starter.Category.Id)
             {
-                var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId).GetAwaiter().GetResult();
+                var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId);
                 if (category is null)
                     throw new ArgumentException("Categoria não encontrada");
 
@@ -114,7 +114,7 @@ namespace DesafioAPI.application.Services
             if (id < 0)
                 throw new ArgumentException("Id inválido");
 
-            var starter = _starterRepository.GetByIdStarter(id).GetAwaiter().GetResult();
+            var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
         }

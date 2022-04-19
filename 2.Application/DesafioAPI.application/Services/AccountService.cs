@@ -19,7 +19,7 @@ namespace DesafioAPI.application.Services
             _accountRepository = accountRepository;
         }
 
-        public Task<List<Account>> GetAccounts()
+        public List<Account> GetAccounts()
         {
             var accounts = _accountRepository.GetAccounts();
             if (accounts is null)
@@ -28,7 +28,7 @@ namespace DesafioAPI.application.Services
             return accounts;
         }
 
-        public Task<Account> GetByIdAccount(int id)
+        public Account GetByIdAccount(int id)
         {
             var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
@@ -37,7 +37,7 @@ namespace DesafioAPI.application.Services
             return account;
         }
 
-        public Task<Account> PostLogin(string username, string password)
+        public Account PostLogin(string username, string password)
         {
             var account = _accountRepository.PostLogin(username, password);
             if (account is null)
@@ -53,7 +53,7 @@ namespace DesafioAPI.application.Services
 
         public void PatchByIdAccount(AccountDto accountDto, int id)
         {
-            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
                 throw new ArgumentException("Conta não encontrada");
 
@@ -66,7 +66,7 @@ namespace DesafioAPI.application.Services
 
         public void PutByIdAccount(AccountDto accountDto, int id)
         {
-            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
                 throw new ArgumentException("Conta não encontrada");
 
@@ -82,7 +82,7 @@ namespace DesafioAPI.application.Services
             if (id < 0)
                 throw new ArgumentException("Id inválido");
                 
-            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
                 throw new ArgumentException("Conta não encontrada");
 
