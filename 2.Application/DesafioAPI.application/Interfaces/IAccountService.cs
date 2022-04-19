@@ -15,7 +15,7 @@ namespace DesafioAPI.application.Interfaces
 
         Task<Account> PostLogin(string username, string password);
 
-        void PostRegister(AccountDto accountDto);
+        void PostRegister(AccountRegisterDto accountRegisterDto);
 
         void PatchByIdAccount(AccountDto accountDto, int id);
 

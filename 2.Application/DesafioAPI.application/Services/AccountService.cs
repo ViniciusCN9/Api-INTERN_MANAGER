@@ -46,34 +46,47 @@ namespace DesafioAPI.application.Services
             return account;
         }
 
-        public void PostRegister(AccountDto accountDto)
+        public void PostRegister(AccountRegisterDto accountRegisterDto)
         {
-            _accountRepository.PostRegister(accountDto.ToDomain());
+            _accountRepository.PostRegister(accountRegisterDto.ToDomain());
         }
 
         public void PatchByIdAccount(AccountDto accountDto, int id)
         {
             var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            if (account is null)
+                throw new ArgumentException("Conta não encontrada");
+
             account.Username = accountDto.Username ?? account.Username;
             account.Password = accountDto.Password ?? account.Password;
             account.IsActive = accountDto.IsActive ?? account.IsActive;
 
-            _accountRepository.UpdateAccount();
+            _accountRepository.UpdateAccount(account);
         }
 
         public void PutByIdAccount(AccountDto accountDto, int id)
         {
             var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            if (account is null)
+                throw new ArgumentException("Conta não encontrada");
+
             account.Username = accountDto.Username;
             account.Password = accountDto.Password;
             account.IsActive = (bool)accountDto.IsActive;
 
-            _accountRepository.UpdateAccount();
+            _accountRepository.UpdateAccount(account);
         }
 
         public void DeleteByIdAccount(int id)
         {
-            _accountRepository.DeleteByIdAccount(id);
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+                
+            var account = _accountRepository.GetByIdAccount(id).GetAwaiter().GetResult();
+            if (account is null)
+                throw new ArgumentException("Conta não encontrada");
+
+            _accountRepository.DeleteAccount(account);
         }
     }
 }

@@ -39,14 +39,14 @@ namespace DesafioAPI.infra.Database.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateAccount()
+        public void UpdateAccount(Account account)
         {
+            _context.Accounts.Update(account);
             _context.SaveChanges();
         }
 
-        public void DeleteByIdAccount(int id)
+        public void DeleteAccount(Account account)
         {
-            var account = _context.Accounts.FirstOrDefault(e => e.Id == id);
             _context.Accounts.Remove(account);
             _context.SaveChanges();
         }

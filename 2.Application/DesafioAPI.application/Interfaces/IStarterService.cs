@@ -11,7 +11,7 @@ namespace DesafioAPI.application.Interfaces
     {
         Task<List<Starter>> GetStarters();
 
-        Task<Starter> GetByIdStarter(int Id);
+        Task<Starter> GetByIdStarter(int id);
 
         Task<Starter> GetByNameStarter(string name);
 

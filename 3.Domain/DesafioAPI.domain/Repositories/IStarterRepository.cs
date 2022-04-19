@@ -16,8 +16,8 @@ namespace DesafioAPI.domain.Repositories
 
         void PostStarter(Starter starter);
 
-        void UpdateStarter();
+        void UpdateStarter(Starter starter);
 
-        void DeleteByIdStarter(int id);
+        void DeleteStarter(Starter starter);
     }
 }

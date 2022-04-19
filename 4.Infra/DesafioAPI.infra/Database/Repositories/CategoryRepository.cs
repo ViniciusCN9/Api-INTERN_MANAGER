@@ -34,15 +34,16 @@ namespace DesafioAPI.infra.Database.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateCategory()
+        public void UpdateCategory(Category category)
         {
+            _context.Categories.Update(category);
             _context.SaveChanges();
         }
 
-        public void DeleteByIdCategory(int id)
+        public void DeleteCategory(Category category)
         {
-            var category = _context.Categories.FirstOrDefault(e => e.Id == id);
             _context.Categories.Remove(category);
+            _context.SaveChanges();
         }
     }
 }

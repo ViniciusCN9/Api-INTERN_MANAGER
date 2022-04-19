@@ -45,26 +45,39 @@ namespace DesafioAPI.application.Services
         public void PatchByIdCategory(CategoryDto categoryDto, int id)
         {
             var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            if (category is null)
+                throw new ArgumentException("Categoria não encontrada");
+
             category.Name = categoryDto.Name ?? category.Name;
             category.Technology = categoryDto.Technology ?? category.Technology;
             category.IsActive = categoryDto.IsActive ?? category.IsActive;
 
-            _categoryRepository.UpdateCategory();
+            _categoryRepository.UpdateCategory(category);
         }
 
         public void PutByIdCategory(CategoryDto categoryDto, int id)
         {
             var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            if (category is null)
+                throw new ArgumentException("Categoria não encontrada");
+
             category.Name = categoryDto.Name;
             category.Technology = categoryDto.Technology;
             category.IsActive = (bool)categoryDto.IsActive;
 
-            _categoryRepository.UpdateCategory();
+            _categoryRepository.UpdateCategory(category);
         }
 
         public void DeleteByIdCategory(int id)
         {
-            _categoryRepository.DeleteByIdCategory(id);
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+                
+            var category = _categoryRepository.GetByIdCategory(id).GetAwaiter().GetResult();
+            if (category is null)
+                throw new ArgumentException("Categoria não encontrada");
+
+            _categoryRepository.DeleteCategory(category);
         }
     }
 }

@@ -20,17 +20,17 @@ namespace DesafioAPI.infra.Database.Repositories
 
         public Task<List<Starter>> GetStarters()
         {
-            return _context.Starters.AsNoTracking().ToListAsync();
+            return _context.Starters.Include(e => e.Category).AsNoTracking().ToListAsync();
         }
 
         public Task<Starter> GetByIdStarter(int Id)
         {
-            return _context.Starters.AsNoTracking().FirstOrDefaultAsync(e => e.Id == Id);
+            return _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefaultAsync(e => e.Id == Id);
         }
 
         public Task<Starter> GetByNameStarter(string name)
         {
-            return _context.Starters.AsNoTracking().FirstOrDefaultAsync(e => e.Name == name);
+            return _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefaultAsync(e => e.Name == name);
         }
 
         public void PostStarter(Starter starter)
@@ -39,14 +39,14 @@ namespace DesafioAPI.infra.Database.Repositories
             _context.SaveChanges();
         }
 
-        public void UpdateStarter()
+        public void UpdateStarter(Starter starter)
         {
+            _context.Starters.Update(starter);
             _context.SaveChanges();
         }
 
-        public void DeleteByIdStarter(int id)
+        public void DeleteStarter(Starter starter)
         {
-            var starter = _context.Starters.FirstOrDefault(e => e.Id == id);
             _context.Starters.Remove(starter);
             _context.SaveChanges();
         }

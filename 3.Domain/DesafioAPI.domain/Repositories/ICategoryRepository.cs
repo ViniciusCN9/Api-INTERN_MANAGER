@@ -14,8 +14,8 @@ namespace DesafioAPI.domain.Repositories
 
         void PostCategory(Category category);
 
-        void UpdateCategory();
+        void UpdateCategory(Category category);
 
-        void DeleteByIdCategory(int id);
+        void DeleteCategory(Category category);
     }
 }

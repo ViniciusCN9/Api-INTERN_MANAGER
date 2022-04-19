@@ -16,8 +16,8 @@ namespace DesafioAPI.domain.Repositories
 
         void PostRegister(Account account);
 
-        void UpdateAccount();
+        void UpdateAccount(Account account);
 
-        void DeleteByIdAccount(int id);      
+        void DeleteAccount(Account account);      
     }
 }

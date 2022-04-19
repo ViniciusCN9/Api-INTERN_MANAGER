@@ -13,5 +13,6 @@ namespace DesafioAPI.domain.Entities
         public string Abbreviation { get; set; }
         public string Email { get; set; }
         public string Photo { get; set; }
+        public Category Category { get; set; }
     }
 }
