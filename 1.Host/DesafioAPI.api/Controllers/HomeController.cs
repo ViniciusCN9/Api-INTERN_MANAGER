@@ -14,10 +14,12 @@ namespace DesafioAPI.api.Controllers
     public class HomeController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly ITokenService _tokenService;
 
-        public HomeController(IAccountService accountService)
+        public HomeController(IAccountService accountService, ITokenService tokenService)
         {
             _accountService = accountService;
+            _tokenService = tokenService;
         }
 
         [HttpPost]
@@ -30,7 +32,8 @@ namespace DesafioAPI.api.Controllers
             try
             {
                 var account = _accountService.PostLogin(login.Username, login.Password);
-                return Ok(account);
+                var token = _tokenService.GenerateToken(account);
+                return Ok(token);
             }
             catch (ArgumentException e)
             {

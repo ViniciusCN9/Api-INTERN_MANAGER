@@ -15,7 +15,7 @@ namespace DesafioAPI.application.Mappers
             Username = accountDto.Username,
             Password = accountDto.Password,
             Email = accountDto.Email,
-            Role = Role.User,
+            Role = Role.USER,
             IsActive = true
         };
     }
