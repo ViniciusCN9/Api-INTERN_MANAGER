@@ -2,7 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.application.Interfaces;
+using DesafioAPI.application.Services;
+using DesafioAPI.domain.Repositories;
 using DesafioAPI.infra.Database.Context;
+using DesafioAPI.infra.Database.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -36,6 +40,15 @@ namespace DesafioAPI.api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DesafioAPI.api", Version = "v1" });
             });
+
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<IAccountService, AccountService>();
+
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<ICategoryService, CategoryService>();
+
+            services.AddScoped<IStarterRepository, StarterRepository>();
+            services.AddScoped<IStarterService, StarterService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
