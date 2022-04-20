@@ -9,7 +9,7 @@ using FluentEmail.Smtp;
 
 namespace DesafioAPI.application.Services
 {
-    public class EmailService : IEmailService
+    public class EmailLocalService : IEmailService
     {
         public void SendEmail(string email, string content)
         {
@@ -31,9 +31,9 @@ namespace DesafioAPI.application.Services
                     .Body(content)
                     .Send();
                 }
-            catch (Exception e)
+            catch
             {
-                throw new Exception("Falha ao enviar email" + e);
+                throw new Exception("Falha ao enviar email");
             }
             
         }

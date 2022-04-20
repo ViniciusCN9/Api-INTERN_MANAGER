@@ -103,7 +103,7 @@ namespace DesafioAPI.api
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddScoped<IEmailService, EmailGmailService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
