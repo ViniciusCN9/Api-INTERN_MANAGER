@@ -17,6 +17,8 @@ namespace DesafioAPI.application.Interfaces
 
         Starter PostStarter(StarterCreateDto starterDto);
 
+        void UploadPhotoByIdStarter(Starter starter, string path);
+
         void PatchByIdStarter(StarterUpdateDto starterDto, int id);
 
         void PutByIdStarter(StarterUpdateDto starterDto, int id);

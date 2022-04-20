@@ -22,6 +22,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace DesafioAPI.api
 {
@@ -88,7 +89,7 @@ namespace DesafioAPI.api
                           }, 
                          new string[] {} 
                     } 
-                }); 
+                });
             });
 
             services.AddScoped<IAccountRepository, AccountRepository>();

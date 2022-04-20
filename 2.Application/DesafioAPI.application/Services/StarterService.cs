@@ -71,6 +71,12 @@ namespace DesafioAPI.application.Services
             return starter;
         }
 
+        public void UploadPhotoByIdStarter(Starter starter, string path)
+        {
+            starter.Photo = path;
+            _starterRepository.UpdateStarter(starter);
+        }
+
         public void PatchByIdStarter(StarterUpdateDto starterDto, int id)
         {
             if (id < 0)
@@ -84,7 +90,6 @@ namespace DesafioAPI.application.Services
             starter.Cpf = starterDto.Cpf ?? starter.Cpf;            
             starter.Abbreviation = starterDto.Abbreviation ?? starter.Abbreviation;            
             starter.Email = starterDto.Email ?? starter.Email;            
-            starter.Photo = starterDto.Photo ?? starter.Photo;
             starter.IsActive = starterDto.IsActive ?? starter.IsActive;
             if (starterDto.CategoryId != 0)
             {
@@ -111,7 +116,6 @@ namespace DesafioAPI.application.Services
             starter.Cpf = starterDto.Cpf;
             starter.Abbreviation = starterDto.Abbreviation;
             starter.Email = starterDto.Email;
-            starter.Photo = starterDto.Photo;
             starter.IsActive = (bool)starterDto.IsActive;
             if (starterDto.CategoryId != starter.Category.Id)
             {

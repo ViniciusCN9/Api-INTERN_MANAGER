@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using DesafioAPI.application.Validations;
+using Microsoft.AspNetCore.Http;
 
 namespace DesafioAPI.application.DataTransferObjects
 {
@@ -20,7 +21,6 @@ namespace DesafioAPI.application.DataTransferObjects
 
         [EmailAddress]
         public string Email { get; set; }
-        public string Photo { get; set; }
         public int CategoryId { get; set; }
         public bool? IsActive { get; set; }
     }
