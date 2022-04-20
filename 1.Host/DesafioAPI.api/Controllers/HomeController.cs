@@ -16,11 +16,13 @@ namespace DesafioAPI.api.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
+        private readonly IEmailService _emailService;
 
-        public HomeController(IAccountService accountService, ITokenService tokenService)
+        public HomeController(IAccountService accountService, ITokenService tokenService, IEmailService emailService)
         {
             _accountService = accountService;
             _tokenService = tokenService;
+            _emailService = emailService;
         }
 
         [HttpPost]
@@ -34,6 +36,8 @@ namespace DesafioAPI.api.Controllers
             {
                 var account = _accountService.PostLogin(login.Username, login.Password);
                 var token = _tokenService.GenerateToken(account);
+                _emailService.SendEmail(account.Email, "Login realizado");
+
                 return Ok(token);
             }
             catch (ArgumentException e)
