@@ -37,7 +37,7 @@ namespace DesafioAPI.api
         public void ConfigureServices(IServiceCollection services)
         {   
             services.AddCors();
-            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);;
+            services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = null);
 
             var key = Encoding.ASCII.GetBytes(SecretKey.secretKey);
             services.AddAuthentication(x =>
@@ -65,6 +65,30 @@ namespace DesafioAPI.api
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DesafioAPI.api", Version = "v1" });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() 
+                { 
+                    Name = "Authorization", 
+                    Type = SecuritySchemeType.ApiKey, 
+                    Scheme = "Bearer", 
+                    BearerFormat = "JWT", 
+                    In = ParameterLocation.Header, 
+                    Description = "JWT Authorization header using the Bearer scheme." 
+                }); 
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement 
+                { 
+                    { 
+                          new OpenApiSecurityScheme 
+                          { 
+                              Reference = new OpenApiReference 
+                              { 
+                                  Type = ReferenceType.SecurityScheme, 
+                                  Id = "Bearer" 
+                              } 
+                          }, 
+                         new string[] {} 
+                    } 
+                }); 
             });
 
             services.AddScoped<IAccountRepository, AccountRepository>();

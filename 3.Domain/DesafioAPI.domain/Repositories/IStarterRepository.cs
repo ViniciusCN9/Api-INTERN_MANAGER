@@ -14,6 +14,8 @@ namespace DesafioAPI.domain.Repositories
 
         Starter GetByNameStarter(string name);
 
+        Starter GetLastStarter();
+
         void PostStarter(Starter starter);
 
         void UpdateStarter(Starter starter);

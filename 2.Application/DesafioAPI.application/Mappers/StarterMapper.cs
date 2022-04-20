@@ -9,13 +9,14 @@ namespace DesafioAPI.application.Mappers
 {
     public static class StarterMapper
     {
-        public static Starter ToDomain(this StarterDto starterDto) => new Starter
+        public static Starter ToDomain(this StarterCreateDto starterDto) => new Starter
         {
             Name = starterDto.Name,
             Cpf = starterDto.Cpf,
             Abbreviation = starterDto.Abbreviation,
             Email = starterDto.Email,
-            Photo = starterDto.Photo
+            Photo = starterDto.Photo,
+            IsActive = true
         };
     }
 }

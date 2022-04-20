@@ -48,6 +48,21 @@ namespace DesafioAPI.infra.Database.Repositories
             return category;
         }
 
+        public Category GetLastCategory()
+        {
+            Category category;
+            try
+            {
+                category = _context.Categories.AsNoTracking().LastOrDefault();
+            }
+            catch
+            {
+                category = null;
+            }
+
+            return category;
+        }
+
         public void PostCategory(Category category)
         {
             _context.Categories.Add(category);

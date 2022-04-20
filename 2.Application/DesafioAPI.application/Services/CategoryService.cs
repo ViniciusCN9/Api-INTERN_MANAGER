@@ -30,6 +30,9 @@ namespace DesafioAPI.application.Services
 
         public Category GetByIdCategory(int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
@@ -37,13 +40,17 @@ namespace DesafioAPI.application.Services
             return category; 
         }
 
-        public void PostCategory(CategoryDto categoryDto)
+        public Category PostCategory(CategoryCreateDto categoryDto)
         {
             _categoryRepository.PostCategory(categoryDto.ToDomain());
+            return _categoryRepository.GetLastCategory();
         }
 
-        public void PatchByIdCategory(CategoryDto categoryDto, int id)
+        public void PatchByIdCategory(CategoryUpdateDto categoryDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
@@ -55,8 +62,11 @@ namespace DesafioAPI.application.Services
             _categoryRepository.UpdateCategory(category);
         }
 
-        public void PutByIdCategory(CategoryDto categoryDto, int id)
+        public void PutByIdCategory(CategoryUpdateDto categoryDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+                
             var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");

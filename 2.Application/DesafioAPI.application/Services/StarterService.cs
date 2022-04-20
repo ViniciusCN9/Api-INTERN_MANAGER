@@ -32,6 +32,9 @@ namespace DesafioAPI.application.Services
 
         public Starter GetByIdStarter(int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
@@ -41,6 +44,9 @@ namespace DesafioAPI.application.Services
 
         public Starter GetByNameStarter(string name)
         {
+            if (string.IsNullOrEmpty(name))
+                throw new ArgumentException("Nome inválido");
+
             var starter = _starterRepository.GetByNameStarter(name);
             if (starter is null)
                 throw new ArgumentException($"Starter {name} não encontrado");
@@ -48,7 +54,7 @@ namespace DesafioAPI.application.Services
             return starter;
         }
 
-        public void PostStarter(StarterDto starterDto)
+        public Starter PostStarter(StarterCreateDto starterDto)
         {
             if (_categoryRepository.GetCategories() is null)
                 throw new ArgumentException("Nenhuma categoria cadastrada");
@@ -57,14 +63,19 @@ namespace DesafioAPI.application.Services
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
-            var starter = starterDto.ToDomain();
-            starter.Category = category;
+            var starterMapped = starterDto.ToDomain();
+            starterMapped.Category = category;
 
-            _starterRepository.PostStarter(starter);
+            _starterRepository.PostStarter(starterMapped);
+            var starter = _starterRepository.GetLastStarter();
+            return starter;
         }
 
-        public void PatchByIdStarter(StarterDto starterDto, int id)
+        public void PatchByIdStarter(StarterUpdateDto starterDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
@@ -74,6 +85,7 @@ namespace DesafioAPI.application.Services
             starter.Abbreviation = starterDto.Abbreviation ?? starter.Abbreviation;            
             starter.Email = starterDto.Email ?? starter.Email;            
             starter.Photo = starterDto.Photo ?? starter.Photo;
+            starter.IsActive = starterDto.IsActive ?? starter.IsActive;
             if (starterDto.CategoryId != 0)
             {
                 var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId);
@@ -86,8 +98,11 @@ namespace DesafioAPI.application.Services
             _starterRepository.UpdateStarter(starter);
         }
 
-        public void PutByIdStarter(StarterDto starterDto, int id)
+        public void PutByIdStarter(StarterUpdateDto starterDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
@@ -97,6 +112,7 @@ namespace DesafioAPI.application.Services
             starter.Abbreviation = starterDto.Abbreviation;
             starter.Email = starterDto.Email;
             starter.Photo = starterDto.Photo;
+            starter.IsActive = (bool)starterDto.IsActive;
             if (starterDto.CategoryId != starter.Category.Id)
             {
                 var category = _categoryRepository.GetByIdCategory(starterDto.CategoryId);

@@ -13,11 +13,11 @@ namespace DesafioAPI.application.Interfaces
 
         Category GetByIdCategory(int id);
 
-        void PostCategory(CategoryDto categoryDto);
+        Category PostCategory(CategoryCreateDto categoryDto);
 
-        void PatchByIdCategory(CategoryDto categoryDto, int id);
+        void PatchByIdCategory(CategoryUpdateDto categoryDto, int id);
 
-        void PutByIdCategory(CategoryDto categoryDto, int id);
+        void PutByIdCategory(CategoryUpdateDto categoryDto, int id);
 
         void DeleteByIdCategory(int id);
     }

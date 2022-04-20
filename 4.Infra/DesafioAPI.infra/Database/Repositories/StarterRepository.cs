@@ -63,6 +63,21 @@ namespace DesafioAPI.infra.Database.Repositories
             return starter;
         }
 
+        public Starter GetLastStarter()
+        {
+            Starter starter;
+            try
+            {
+                starter = _context.Starters.Include(e => e.Category).AsNoTracking().Last();
+            }
+            catch
+            {
+                starter = null;
+            }
+
+            return starter;
+        }
+
         public void PostStarter(Starter starter)
         {
             _context.Starters.Add(starter);

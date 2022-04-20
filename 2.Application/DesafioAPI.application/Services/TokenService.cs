@@ -24,9 +24,10 @@ namespace DesafioAPI.application.Services
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Name, account.Username.ToString()),
+                    new Claim(ClaimTypes.Email, account.Email.ToString()),
                     new Claim(ClaimTypes.Role, account.Role.ToString())
                 }),
-                Expires = DateTime.UtcNow.AddMinutes(5),
+                Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);

@@ -12,6 +12,8 @@ namespace DesafioAPI.domain.Repositories
 
         Category GetByIdCategory(int id);
 
+        Category GetLastCategory();
+
         void PostCategory(Category category);
 
         void UpdateCategory(Category category);

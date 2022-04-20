@@ -53,6 +53,9 @@ namespace DesafioAPI.application.Services
 
         public void PatchByIdAccount(AccountDto accountDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+                
             var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
                 throw new ArgumentException("Conta não encontrada");
@@ -66,6 +69,9 @@ namespace DesafioAPI.application.Services
 
         public void PutByIdAccount(AccountDto accountDto, int id)
         {
+            if (id < 0)
+                throw new ArgumentException("Id inválido");
+
             var account = _accountRepository.GetByIdAccount(id);
             if (account is null)
                 throw new ArgumentException("Conta não encontrada");

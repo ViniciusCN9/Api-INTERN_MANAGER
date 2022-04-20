@@ -9,7 +9,7 @@ namespace DesafioAPI.application.Mappers
 {
     public static class CategoryMapper
     {
-        public static Category ToDomain(this CategoryDto categoryDto) => new Category
+        public static Category ToDomain(this CategoryCreateDto categoryDto) => new Category
         {
             Name = categoryDto.Name,
             Technology = categoryDto.Technology,

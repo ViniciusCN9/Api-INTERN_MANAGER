@@ -15,11 +15,11 @@ namespace DesafioAPI.application.Interfaces
 
         Starter GetByNameStarter(string name);
 
-        void PostStarter(StarterDto starterDto);
+        Starter PostStarter(StarterCreateDto starterDto);
 
-        void PatchByIdStarter(StarterDto starterDto, int id);
+        void PatchByIdStarter(StarterUpdateDto starterDto, int id);
 
-        void PutByIdStarter(StarterDto starterDto, int id);
+        void PutByIdStarter(StarterUpdateDto starterDto, int id);
 
         void DeleteByIdStarter(int id);
     }

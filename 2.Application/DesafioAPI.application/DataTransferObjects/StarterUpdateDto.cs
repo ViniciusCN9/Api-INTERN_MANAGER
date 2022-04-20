@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace DesafioAPI.application.DataTransferObjects
 {
-    public class StarterDto
+    public class StarterUpdateDto
     {
         public string Name { get; set; }
         public string Cpf { get; set; }
@@ -13,5 +13,6 @@ namespace DesafioAPI.application.DataTransferObjects
         public string Email { get; set; }
         public string Photo { get; set; }
         public int CategoryId { get; set; }
+        public bool? IsActive { get; set; }
     }
 }
