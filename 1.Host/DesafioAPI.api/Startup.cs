@@ -101,6 +101,7 @@ namespace DesafioAPI.api
             services.AddScoped<IStarterService, StarterService>();
 
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

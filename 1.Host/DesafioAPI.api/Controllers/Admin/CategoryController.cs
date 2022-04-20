@@ -68,7 +68,7 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var category = _categoryService.PostCategory(categoryDto);
-                return CreatedAtAction(nameof(GetByIdCategory), category.Id);
+                return Created($"v1/Admin/Category/{category.Id}", category);
             }
             catch (ArgumentException e)
             {

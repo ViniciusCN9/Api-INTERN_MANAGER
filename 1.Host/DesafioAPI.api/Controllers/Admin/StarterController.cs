@@ -88,7 +88,7 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var starter = _starterService.PostStarter(starterDto);
-                return CreatedAtAction(nameof(GetByIdStarter), starter.Id);
+                return Created($"v1/Admin/Starter/{starter.Id}", starter);
             }
             catch (ArgumentException e)
             {

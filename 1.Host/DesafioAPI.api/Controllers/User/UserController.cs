@@ -10,14 +10,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace DesafioAPI.api.Controllers.User
 {
     [ApiController]
-    [Authorize(Roles = "USER")]
+    [Authorize(Roles = "ADMIN, USER")]
     [Route("v1/[controller]")]
     public class UserController : ControllerBase
     {
+        private readonly IUserService _userService;
         private readonly IStarterService _starterService;
 
-        public UserController(IStarterService starterService)
+        public UserController(IUserService userService, IStarterService starterService)
         {
+            _userService = userService;
             _starterService = starterService;
         }
 
@@ -28,8 +30,89 @@ namespace DesafioAPI.api.Controllers.User
             try
             {
                 var starters = _starterService.GetStarters();
-                
-                return Ok(starters);
+                var startersActive = _userService.VerifyStartersIsActive(starters);
+                var startersHiddenInfo = new List<object>();
+                foreach (var starter in startersActive)
+                {
+                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                }
+
+                return Ok(startersHiddenInfo);
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Starter/{name}")]
+        public IActionResult GetByNameStarter([FromRoute] string name)
+        {
+            try
+            {
+                var starter = _starterService.GetByNameStarter(name);
+                if (!starter.IsActive)
+                    return NotFound(new {msg = "Starter desativado"});
+
+                var starterHiddenInfo = _userService.HideStarterInformations(starter);
+                return Ok(starterHiddenInfo);
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Starter/Ascending")]
+        public IActionResult GetAscendingStarters()
+        {
+            try
+            {
+                var starters = _starterService.GetStarters();
+                var startersActive = _userService.VerifyStartersIsActive(starters).OrderBy(e => e.Name);
+                var startersHiddenInfo = new List<object>();
+                foreach (var starter in startersActive)
+                {
+                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                }
+
+                return Ok(startersHiddenInfo);
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Starter/Descending")]
+        public IActionResult GetDescendingStarters()
+        {
+            try
+            {
+                var starters = _starterService.GetStarters();
+                var startersActive = _userService.VerifyStartersIsActive(starters).OrderByDescending(e => e.Name);
+                var startersHiddenInfo = new List<object>();
+                foreach (var starter in startersActive)
+                {
+                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                }
+
+                return Ok(startersHiddenInfo);
             }
             catch (ArgumentException e)
             {

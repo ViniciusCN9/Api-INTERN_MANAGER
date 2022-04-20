@@ -22,7 +22,7 @@ namespace DesafioAPI.application.Services
         public List<Category> GetCategories()
         {
             var categories = _categoryRepository.GetCategories();
-            if (categories is null)
+            if (!categories.Any())
                 throw new ArgumentException("Nenhuma categoria encontrada");
 
             return categories;

@@ -22,7 +22,7 @@ namespace DesafioAPI.application.Services
         public List<Account> GetAccounts()
         {
             var accounts = _accountRepository.GetAccounts();
-            if (accounts is null)
+            if (!accounts.Any())
                 throw new ArgumentException("Nenhum conta encontrada");
 
             return accounts;

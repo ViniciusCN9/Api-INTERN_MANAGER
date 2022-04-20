@@ -24,7 +24,7 @@ namespace DesafioAPI.application.Services
         public List<Starter> GetStarters()
         {
             var starters = _starterRepository.GetStarters();
-            if (starters is null)
+            if (!starters.Any())
                 throw new ArgumentException("Nenhum starter encontrado");
 
             return starters;
@@ -133,6 +133,8 @@ namespace DesafioAPI.application.Services
             var starter = _starterRepository.GetByIdStarter(id);
             if (starter is null)
                 throw new ArgumentException("Starter não encontrado");
+
+            _starterRepository.DeleteStarter(starter);
         }
     }
 }

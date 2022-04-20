@@ -38,7 +38,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Category category;
             try
             {
-                category = _context.Categories.AsNoTracking().FirstOrDefault(e => e.Id == id);
+                category = _context.Categories.FirstOrDefault(e => e.Id == id);
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Category category;
             try
             {
-                category = _context.Categories.AsNoTracking().LastOrDefault();
+                category = _context.Categories.AsNoTracking().ToList().LastOrDefault();
             }
             catch
             {
