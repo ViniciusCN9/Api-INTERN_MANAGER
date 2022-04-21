@@ -524,7 +524,7 @@ FodyWeavers.xsd
 # JetBrains Rider
 
 ### VisualStudioCode ###
-*.vscode
+!.vscode/*.code-snippets
 
 # Local History for Visual Studio Code
 
