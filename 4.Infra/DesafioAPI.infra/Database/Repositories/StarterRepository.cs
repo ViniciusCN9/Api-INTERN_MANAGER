@@ -48,19 +48,19 @@ namespace DesafioAPI.infra.Database.Repositories
             return starter;
         }
 
-        public Starter GetByNameStarter(string name)
+        public List<Starter> GetByNameStarters(string name)
         {
-            Starter starter;
+            List<Starter> starters;
             try
             {
-                starter = _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefault(e => e.Name == name);
+                starters = _context.Starters.Include(e => e.Category).AsNoTracking().Where(e => e.Name.Contains(name)).ToList();
             }
             catch
             {
-                starter = null;
+                starters = null;
             }
 
-            return starter;
+            return starters;
         }
 
         public Starter GetLastStarter()

@@ -51,16 +51,19 @@ namespace DesafioAPI.api.Controllers.User
 
         [HttpGet]
         [Route("Starter/{name}")]
-        public IActionResult GetByNameStarter([FromRoute] string name)
+        public IActionResult GetByNameStarters([FromRoute] string name)
         {
             try
             {
-                var starter = _starterService.GetByNameStarter(name);
-                if (!starter.IsActive)
-                    return NotFound(new {msg = "Starter desativado"});
+                var starters = _starterService.GetByNameStarters(name);
+                var startersActive = _userService.VerifyStartersIsActive(starters);
+                var startersHiddenInfo = new List<object>();
+                foreach (var starter in startersActive)
+                {
+                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                }
 
-                var starterHiddenInfo = _userService.HideStarterInformations(starter);
-                return Ok(starterHiddenInfo);
+                return Ok(startersHiddenInfo);
             }
             catch (ArgumentException e)
             {

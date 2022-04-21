@@ -42,16 +42,16 @@ namespace DesafioAPI.application.Services
             return starter;
         }
 
-        public Starter GetByNameStarter(string name)
+        public List<Starter> GetByNameStarters(string name)
         {
             if (string.IsNullOrEmpty(name))
                 throw new ArgumentException("Nome inválido");
 
-            var starter = _starterRepository.GetByNameStarter(name);
-            if (starter is null)
-                throw new ArgumentException($"Starter {name} não encontrado");
+            var starters = _starterRepository.GetByNameStarters(name);
+            if (starters is null)
+                throw new ArgumentException($"Nenhum {name} encontrado");
 
-            return starter;
+            return starters;
         }
 
         public Starter PostStarter(StarterCreateDto starterDto)

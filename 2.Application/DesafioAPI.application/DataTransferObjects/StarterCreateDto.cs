@@ -25,7 +25,6 @@ namespace DesafioAPI.application.DataTransferObjects
         [Required(ErrorMessage = "Informe um email")]
         [EmailAddress]
         public string Email { get; set; }
-        public string Photo { get; set; }
 
         [Required(ErrorMessage = "Informe a categoria")]
         public int CategoryId { get; set; }

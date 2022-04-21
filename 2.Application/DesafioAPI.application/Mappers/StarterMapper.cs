@@ -15,7 +15,7 @@ namespace DesafioAPI.application.Mappers
             Cpf = starterDto.Cpf,
             Abbreviation = starterDto.Abbreviation,
             Email = starterDto.Email,
-            Photo = "default.jpg",
+            Photo = "Default.jpg",
             IsActive = true
         };
     }

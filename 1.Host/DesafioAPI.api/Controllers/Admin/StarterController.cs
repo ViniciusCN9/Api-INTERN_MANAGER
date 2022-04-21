@@ -70,8 +70,8 @@ namespace DesafioAPI.api.Controllers.Admin
         {
             try
             {
-                var starter = _starterService.GetByNameStarter(name);
-                return Ok(starter);
+                var starters = _starterService.GetByNameStarters(name);
+                return Ok(starters);
             }
             catch (ArgumentException e)
             {
@@ -85,18 +85,22 @@ namespace DesafioAPI.api.Controllers.Admin
 
         [HttpPost]
         [Route("Upload/{id:int}")]
-        public IActionResult UploadPhotoByIdStarter([FromForm] FileUpload fileUpload, [FromRoute] int id)
+        public IActionResult UploadByIdPhotoStarter([FromForm] FileUpload fileUpload, [FromRoute] int id)
         {
             try
             {
                 var starter = _starterService.GetByIdStarter(id);
+                byte[] bytes;
 
                 if (fileUpload.photo is null)
                 {
-                    DeleteImageOnRoot(starter.Photo);
-                    _starterService.UploadPhotoByIdStarter(starter, "Default.jpg");
+                    if (starter.Photo != "Default.jpg")
+                        DeleteImageOnRoot(starter.Photo);
 
-                    return Ok();
+                    _starterService.UploadPhotoByIdStarter(starter, "Default.jpg");
+                    bytes = ShowImageFromRoot(starter);
+
+                    return File(bytes, "image/png");
                 }
 
                 if (!starter.Photo.Equals("Default.jpg"))
@@ -104,8 +108,30 @@ namespace DesafioAPI.api.Controllers.Admin
 
                 string photoPath = SaveImageOnRoot(fileUpload.photo, starter.Abbreviation);
                 _starterService.UploadPhotoByIdStarter(starter, photoPath);
+                bytes = ShowImageFromRoot(starter);
 
-                return Ok();
+                return File(bytes, "image/png");
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Photo/{id:int}")]
+        public IActionResult PhotoByIdStarter([FromRoute] int id)
+        {
+            try
+            {
+                var starter = _starterService.GetByIdStarter(id);
+                var bytes = ShowImageFromRoot(starter);
+
+                return File(bytes, "image/png");
             }
             catch (ArgumentException e)
             {
@@ -226,6 +252,16 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 throw new Exception(e.Message);
             }
+        }
+
+        private byte[] ShowImageFromRoot(Starter starter)
+        {
+            string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");
+            string photoPath = Path.Combine(directoryPath, starter.Photo);
+            if (!System.IO.File.Exists(photoPath))
+                throw new ArgumentException("Foto não encontrada");
+
+            return System.IO.File.ReadAllBytes(photoPath);
         }
 
         private void DeleteImageOnRoot(string photo)

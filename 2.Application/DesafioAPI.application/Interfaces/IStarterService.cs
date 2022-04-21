@@ -13,7 +13,7 @@ namespace DesafioAPI.application.Interfaces
 
         Starter GetByIdStarter(int id);
 
-        Starter GetByNameStarter(string name);
+        List<Starter> GetByNameStarters(string name);
 
         Starter PostStarter(StarterCreateDto starterDto);
 

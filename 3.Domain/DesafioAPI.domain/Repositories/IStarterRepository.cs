@@ -12,7 +12,7 @@ namespace DesafioAPI.domain.Repositories
 
         Starter GetByIdStarter(int Id);
 
-        Starter GetByNameStarter(string name);
+        List<Starter> GetByNameStarters(string name);
 
         Starter GetLastStarter();
 
