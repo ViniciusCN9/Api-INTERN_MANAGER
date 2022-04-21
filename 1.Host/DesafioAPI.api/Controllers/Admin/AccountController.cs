@@ -63,7 +63,7 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PatchByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             try
@@ -85,8 +85,11 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PutByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
+
+            if (string.IsNullOrEmpty(accountDto.Username) || string.IsNullOrEmpty(accountDto.Password) || string.IsNullOrEmpty(accountDto.Email) || accountDto.IsActive is null)
+                return BadRequest("Preencha todos os campos");
 
             try
             {

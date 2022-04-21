@@ -146,7 +146,7 @@ namespace DesafioAPI.api.Controllers.Admin
         [HttpPost]
         public IActionResult PostStarter([FromBody] StarterCreateDto starterDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             try
@@ -169,7 +169,7 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PatchByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             try
@@ -191,8 +191,11 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PutByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
+
+            if (string.IsNullOrEmpty(starterDto.Name) || string.IsNullOrEmpty(starterDto.Name) || string.IsNullOrEmpty(starterDto.Name) || string.IsNullOrEmpty(starterDto.Name) || starterDto.CategoryId == 0 || starterDto.IsActive is null)
+                return BadRequest("Preencha todos os campos");
 
             try
             {
@@ -215,7 +218,10 @@ namespace DesafioAPI.api.Controllers.Admin
         {
             try
             {
+                var starter = _starterService.GetByIdStarter(id);
+                DeleteImageOnRoot(starter.Photo);
                 _starterService.DeleteByIdStarter(id);
+
                 return Ok();
             }
             catch (ArgumentException e)
@@ -266,6 +272,9 @@ namespace DesafioAPI.api.Controllers.Admin
 
         private void DeleteImageOnRoot(string photo)
         {
+            if (photo == "Default.jpg")
+                return;
+
             try
             {
                 string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");

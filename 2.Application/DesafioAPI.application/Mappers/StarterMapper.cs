@@ -13,7 +13,7 @@ namespace DesafioAPI.application.Mappers
         {
             Name = starterDto.Name,
             Cpf = starterDto.Cpf,
-            Abbreviation = starterDto.Abbreviation,
+            Abbreviation = starterDto.Abbreviation.ToLower(),
             Email = starterDto.Email,
             Photo = "Default.jpg",
             IsActive = true

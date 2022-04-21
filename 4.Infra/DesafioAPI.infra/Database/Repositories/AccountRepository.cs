@@ -23,7 +23,7 @@ namespace DesafioAPI.infra.Database.Repositories
             List<Account> accounts;
             try
             {
-                accounts = _context.Accounts.AsNoTracking().ToList();
+                accounts = _context.Accounts.AsNoTracking().Where(e => e.Role == 0).ToList();
             }
             catch
             {
@@ -38,7 +38,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Account account;
             try
             {
-                account = _context.Accounts.AsNoTracking().First(e => e.Id == id);
+                account = _context.Accounts.Where(e => e.Role == 0).First(e => e.Id == id);
             }
             catch
             {

@@ -13,10 +13,12 @@ namespace DesafioAPI.application.Services
     public class CategoryService : ICategoryService
     {
         private readonly ICategoryRepository _categoryRepository;
+        private readonly IStarterRepository _starterRepository;
 
-        public CategoryService(ICategoryRepository categoryRepository)
+        public CategoryService(ICategoryRepository categoryRepository, IStarterRepository starterRepository)
         {
             _categoryRepository = categoryRepository;
+            _starterRepository = starterRepository;
         }
 
         public List<Category> GetCategories()
@@ -55,6 +57,13 @@ namespace DesafioAPI.application.Services
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
+            if (categoryDto.IsActive == false)
+            {
+                var starter = _starterRepository.GetStarters().Where(e => e.Category.Equals(category)).First(e => e.IsActive);
+                if (starter != null)
+                    throw new Exception("Categoria não pode ser desativada pois contêm starters ativos");
+            }
+
             category.Name = categoryDto.Name ?? category.Name;
             category.Technology = categoryDto.Technology ?? category.Technology;
             category.IsActive = categoryDto.IsActive ?? category.IsActive;
@@ -71,6 +80,13 @@ namespace DesafioAPI.application.Services
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
+            if (categoryDto.IsActive == false)
+            {
+                var starter = _starterRepository.GetStarters().Where(e => e.Category.Equals(category)).First(e => e.IsActive);
+                if (starter != null)
+                    throw new Exception("Categoria não pode ser desativada pois contêm starters ativos");
+            }
+
             category.Name = categoryDto.Name;
             category.Technology = categoryDto.Technology;
             category.IsActive = (bool)categoryDto.IsActive;
@@ -86,6 +102,10 @@ namespace DesafioAPI.application.Services
             var category = _categoryRepository.GetByIdCategory(id);
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
+
+            var starter = _starterRepository.GetStarters().First(e => e.Category.Equals(category));
+            if (starter != null)
+                throw new Exception("Categoria não pode ser deletada pois contêm starters cadastrados");
 
             _categoryRepository.DeleteCategory(category);
         }

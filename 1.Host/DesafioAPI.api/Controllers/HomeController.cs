@@ -35,6 +35,9 @@ namespace DesafioAPI.api.Controllers
             try
             {
                 var account = _accountService.PostLogin(login.Username, login.Password);
+                if (!account.IsActive)
+                    return Unauthorized("A conta está desativada");
+
                 var token = _tokenService.GenerateToken(account);
                 _emailService.SendEmail(account.Email, "Login realizado");
 

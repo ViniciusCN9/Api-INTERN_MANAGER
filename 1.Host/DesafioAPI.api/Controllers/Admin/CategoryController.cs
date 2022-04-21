@@ -62,7 +62,7 @@ namespace DesafioAPI.api.Controllers.Admin
         [HttpPost]
         public IActionResult PostCategory([FromBody] CategoryCreateDto categoryDto)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             try
@@ -84,7 +84,7 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PatchByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
 
             try
@@ -106,8 +106,11 @@ namespace DesafioAPI.api.Controllers.Admin
         [Route("{id:int}")]
         public IActionResult PutByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
+
+            if (string.IsNullOrEmpty(categoryDto.Name) || string.IsNullOrEmpty(categoryDto.Technology) || categoryDto.IsActive is null)
+                return BadRequest("Preencha todos os campos");
 
             try
             {
