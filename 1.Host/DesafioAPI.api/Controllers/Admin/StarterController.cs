@@ -90,11 +90,19 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var starter = _starterService.GetByIdStarter(id);
+
+                if (fileUpload.photo is null)
+                {
+                    DeleteImageOnRoot(starter.Photo);
+                    _starterService.UploadPhotoByIdStarter(starter, "Default.jpg");
+
+                    return Ok();
+                }
+
                 if (!starter.Photo.Equals("Default.jpg"))
                     DeleteImageOnRoot(starter.Photo);
 
                 string photoPath = SaveImageOnRoot(fileUpload.photo, starter.Abbreviation);
-                
                 _starterService.UploadPhotoByIdStarter(starter, photoPath);
 
                 return Ok();
@@ -202,9 +210,6 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");
                 string photoUniqueName;
-                if (photo is null)
-                    throw new ArgumentException("Insira uma foto");
-
                 string photoExtension = photo.FileName.Split('.').Last();
 
                 photoUniqueName = Guid.NewGuid().ToString().Substring(0,9) + abbreviation + "." + photoExtension;

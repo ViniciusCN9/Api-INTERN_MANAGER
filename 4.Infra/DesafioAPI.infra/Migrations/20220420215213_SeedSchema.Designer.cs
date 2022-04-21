@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DesafioAPI.infra.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220419012254_CreateSchema")]
-    partial class CreateSchema
+    [Migration("20220420215213_SeedSchema")]
+    partial class SeedSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

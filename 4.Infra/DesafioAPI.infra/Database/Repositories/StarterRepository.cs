@@ -38,7 +38,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Starter starter;
             try
             {
-                starter = _context.Starters.Include(e => e.Category).AsNoTracking().FirstOrDefault(e => e.Id == Id);
+                starter = _context.Starters.Include(e => e.Category).FirstOrDefault(e => e.Id == Id);
             }
             catch
             {

@@ -73,8 +73,10 @@ namespace DesafioAPI.application.Services
 
         public void UploadPhotoByIdStarter(Starter starter, string path)
         {
-            starter.Photo = path;
-            _starterRepository.UpdateStarter(starter);
+            Starter starterWithPhoto = starter;
+            starterWithPhoto.Photo = path;
+
+            _starterRepository.UpdateStarter(starterWithPhoto);
         }
 
         public void PatchByIdStarter(StarterUpdateDto starterDto, int id)
