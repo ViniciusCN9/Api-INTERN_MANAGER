@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Helpers;
 using DesafioAPI.application.DataTransferObjects;
 using DesafioAPI.application.Interfaces;
 using DesafioAPI.domain.Entities;
@@ -19,12 +20,12 @@ namespace DesafioAPI.api.Controllers.Admin
     public class StarterController : ControllerBase
     {
         private readonly IStarterService _starterService;
-        public static IWebHostEnvironment _environment;
+        private readonly FilesHelper _filesHelper;
 
-        public StarterController(IStarterService starterService, IWebHostEnvironment environment)
+        public StarterController(IStarterService starterService, FilesHelper filesHelper)
         {
             _starterService = starterService;
-            _environment = environment;
+            _filesHelper = filesHelper;
         }
 
         [HttpGet]
@@ -95,20 +96,20 @@ namespace DesafioAPI.api.Controllers.Admin
                 if (fileUpload.photo is null)
                 {
                     if (starter.Photo != "Default.jpg")
-                        DeleteImageOnRoot(starter.Photo);
+                        _filesHelper.DeleteImageOnRoot(starter.Photo);
 
                     _starterService.UploadPhotoByIdStarter(starter, "Default.jpg");
-                    bytes = ShowImageFromRoot(starter);
+                    bytes = _filesHelper.ShowImageFromRoot(starter);
 
                     return File(bytes, "image/png");
                 }
 
                 if (!starter.Photo.Equals("Default.jpg"))
-                    DeleteImageOnRoot(starter.Photo);
+                    _filesHelper.DeleteImageOnRoot(starter.Photo);
 
-                string photoPath = SaveImageOnRoot(fileUpload.photo, starter.Abbreviation);
+                string photoPath = _filesHelper.SaveImageOnRoot(fileUpload.photo, starter.Abbreviation);
                 _starterService.UploadPhotoByIdStarter(starter, photoPath);
-                bytes = ShowImageFromRoot(starter);
+                bytes = _filesHelper.ShowImageFromRoot(starter);
 
                 return File(bytes, "image/png");
             }
@@ -129,7 +130,7 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var starter = _starterService.GetByIdStarter(id);
-                var bytes = ShowImageFromRoot(starter);
+                var bytes = _filesHelper.ShowImageFromRoot(starter);
 
                 return File(bytes, "image/png");
             }
@@ -219,7 +220,7 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var starter = _starterService.GetByIdStarter(id);
-                DeleteImageOnRoot(starter.Photo);
+                _filesHelper.DeleteImageOnRoot(starter.Photo);
                 _starterService.DeleteByIdStarter(id);
 
                 return Ok();
@@ -232,61 +233,7 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
-        }
-
-        //-------------------- Internal methods --------------------
-
-        private string SaveImageOnRoot(IFormFile photo, string abbreviation)
-        {
-            try
-            {
-                string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");
-                string photoUniqueName;
-                string photoExtension = photo.FileName.Split('.').Last();
-
-                photoUniqueName = Guid.NewGuid().ToString().Substring(0,9) + abbreviation + "." + photoExtension;
-                string photoPath = Path.Combine(directoryPath, photoUniqueName);
-
-                using (var fileStream = new FileStream(photoPath, FileMode.Create))
-                {
-                    photo.CopyTo(fileStream);
-                }
-
-                return photoUniqueName;
-            }
-            catch (Exception e)
-            {
-                throw new Exception(e.Message);
-            }
-        }
-
-        private byte[] ShowImageFromRoot(Starter starter)
-        {
-            string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");
-            string photoPath = Path.Combine(directoryPath, starter.Photo);
-            if (!System.IO.File.Exists(photoPath))
-                throw new ArgumentException("Foto não encontrada");
-
-            return System.IO.File.ReadAllBytes(photoPath);
-        }
-
-        private void DeleteImageOnRoot(string photo)
-        {
-            if (photo == "Default.jpg")
-                return;
-
-            try
-            {
-                string directoryPath = Path.Combine(_environment.WebRootPath, "Assets/Images");
-                string photoPath = Path.Combine(directoryPath, photo);
-                if (System.IO.File.Exists(photoPath))
-                    System.IO.File.Delete(photoPath);
-            }
-            catch
-            {
-                throw new Exception("Falha ao deletar foto antiga");
-            }
-        }
+        }        
     }
 
     //-------------------- Swagger object bug --------------------

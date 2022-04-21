@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Helpers;
 using DesafioAPI.application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,11 +17,13 @@ namespace DesafioAPI.api.Controllers.User
     {
         private readonly IUserService _userService;
         private readonly IStarterService _starterService;
+        private readonly FilesHelper _filesHelper;
 
-        public UserController(IUserService userService, IStarterService starterService)
+        public UserController(IUserService userService, IStarterService starterService, FilesHelper filesHelper)
         {
             _userService = userService;
             _starterService = starterService;
+            _filesHelper = filesHelper;
         }
 
         [HttpGet]
@@ -64,6 +67,27 @@ namespace DesafioAPI.api.Controllers.User
                 }
 
                 return Ok(startersHiddenInfo);
+            }
+            catch (ArgumentException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("Starter/Photo/{name}")]
+        public IActionResult PhotoByNameStarter([FromRoute] string name)
+        {
+            try
+            {
+                var starter = _starterService.GetByNameStarters(name).First(e => e.Name == name);
+                var bytes = _filesHelper.ShowImageFromRoot(starter);
+
+                    return File(bytes, "image/png");
             }
             catch (ArgumentException e)
             {
