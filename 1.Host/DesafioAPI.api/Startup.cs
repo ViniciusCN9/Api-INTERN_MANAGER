@@ -105,7 +105,7 @@ namespace DesafioAPI.api
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
-            services.AddScoped<IEmailService, EmailLocalService>();
+            services.AddScoped<IEmailService, EmailGmailService>();
 
             services.AddScoped<FilesHelper, FilesHelper>();
             services.AddScoped<HateoasHelper, HateoasHelper>();
