@@ -10,23 +10,37 @@ namespace DesafioAPI.application.Services
     {
         public List<Starter> VerifyStartersIsActive(List<Starter> starter)
         {
-            List<Starter> startersActive = starter.Where(e => e.IsActive).ToList();
-            if (!startersActive.Any())
-                throw new ArgumentException("Nenhum starter ativo");
-
-            return startersActive;
+            try
+            {
+                List<Starter> startersActive = starter.Where(e => e.IsActive).ToList();
+                if (!startersActive.Any())
+                    throw new ArgumentException("Nenhum starter ativo");
+                
+                return startersActive;
+            }
+            catch
+            {
+                throw new Exception("Erro ao verificar status");
+            }
         }
 
         public object HideStarterInformations(Starter starter)
         {
-            return new
+            try
             {
-                name = starter.Name, 
-                abbreviation = starter.Abbreviation,
-                email = starter.Email,
-                photo = starter.Photo,
-                category = $"{starter.Category.Name} - {starter.Category.Technology}" 
-            };
+                return new
+                {
+                    name = starter.Name, 
+                    abbreviation = starter.Abbreviation,
+                    email = starter.Email,
+                    photo = starter.Photo,
+                    category = $"{starter.Category.Name} - {starter.Category.Technology}" 
+                };
+            }
+            catch
+            {
+                throw new Exception("Erro ao esconder informações");
+            }
         }
     }
 }

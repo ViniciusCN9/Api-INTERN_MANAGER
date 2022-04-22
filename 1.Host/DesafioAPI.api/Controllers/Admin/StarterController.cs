@@ -186,7 +186,8 @@ namespace DesafioAPI.api.Controllers.Admin
         /// <summary>
         /// Cadastra um starter.
         /// </summary>
-        /// <response code="200"> Starter cadastrado com sucesso</response>
+        /// <returns>Starter cadastrado</returns>
+        /// <response code="200"> Retorna starter cadastrado</response>
         [HttpPost]
         public IActionResult PostStarter([FromBody] StarterCreateDto starterDto)
         {

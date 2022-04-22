@@ -84,7 +84,8 @@ namespace DesafioAPI.api.Controllers.Admin
         /// <summary>
         /// Cadastra uma categoria.
         /// </summary>
-        /// <response code="200"> Categoria cadastrada com sucesso</response>
+        /// <returns>Categoria cadastrada</returns>
+        /// <response code="200"> Retorna categoria cadastrada</response>
         [HttpPost]
         public IActionResult PostCategory([FromBody] CategoryCreateDto categoryDto)
         {
