@@ -23,7 +23,7 @@ namespace DesafioAPI.infra.Database.Repositories
             List<Category> categories;
             try
             {
-                categories = _context.Categories.AsNoTracking().ToList();
+                categories = _context.Categories.ToList();
             }
             catch
             {
@@ -53,7 +53,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Category category;
             try
             {
-                category = _context.Categories.AsNoTracking().ToList().LastOrDefault();
+                category = _context.Categories.ToList().LastOrDefault();
             }
             catch
             {

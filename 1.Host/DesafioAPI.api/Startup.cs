@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using DesafioAPI.api.Helpers;
 using DesafioAPI.application.Interfaces;
 using DesafioAPI.application.Services;
+using DesafioAPI.domain.Entities;
 using DesafioAPI.domain.Repositories;
 using DesafioAPI.domain.Settings;
 using DesafioAPI.infra.Database.Context;
@@ -15,6 +17,8 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -104,6 +108,13 @@ namespace DesafioAPI.api
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IEmailService, EmailLocalService>();
+
+            services.AddScoped<FilesHelper, FilesHelper>();
+            services.AddScoped<HateoasHelper, HateoasHelper>();
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>()
+                .AddScoped<IUrlHelper>(x => x.GetRequiredService<IUrlHelperFactory>()
+                .GetUrlHelper(x.GetRequiredService<IActionContextAccessor>().ActionContext));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Hateoas.Containers;
+using DesafioAPI.api.Helpers;
 using DesafioAPI.application.DataTransferObjects;
 using DesafioAPI.application.Interfaces;
+using DesafioAPI.domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +19,14 @@ namespace DesafioAPI.api.Controllers.Admin
     public class CategoryController : ControllerBase
     {
         private readonly ICategoryService _categoryService;
+        private readonly IUrlHelper _urlHelper;
+        private readonly HateoasHelper _hateoasHelper;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryService categoryService, IUrlHelper urlHelper, HateoasHelper hateoasHelper)
         {
             _categoryService = categoryService;
+            _urlHelper = urlHelper;
+            _hateoasHelper = hateoasHelper;
         }
 
         [HttpGet]
@@ -28,7 +35,13 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var categories = _categoryService.GetCategories();
-                return Ok(categories);
+                var categoriesWithLinks = new List<CategoryContainer>();
+                foreach (var category in categories)
+                {
+                    categoriesWithLinks.Add(_hateoasHelper.CategoryGenerateLink(category, GetUrlOfActions(category)));
+                }
+                
+                return Ok(categoriesWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -41,13 +54,14 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(GetByIdCategory))]
         public IActionResult GetByIdCategory([FromRoute] int id)
         {
             try
             {
                 var category = _categoryService.GetByIdCategory(id);
-                return Ok(category);
+                var categoryWithLinks = _hateoasHelper.CategoryGenerateLink(category, GetUrlOfActions(category));
+                return Ok(categoryWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -68,7 +82,8 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var category = _categoryService.PostCategory(categoryDto);
-                return Created($"v1/Admin/Category/{category.Id}", category);
+                var categoryWithLinks = _hateoasHelper.CategoryGenerateLink(category, GetUrlOfActions(category));
+                return Created($"v1/Admin/Category/{category.Id}", categoryWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -81,7 +96,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPatch]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PatchByIdCategory))]
         public IActionResult PatchByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -103,7 +118,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PutByIdCategory))]
         public IActionResult PutByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -128,7 +143,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:int}",  Name = nameof(DeleteByIdCategory))]
         public IActionResult DeleteByIdCategory([FromRoute] int id)
         {
             try
@@ -144,6 +159,26 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
+        }
+
+        //-------------------- Internal Methods --------------------
+        private List<string> GetUrlOfActions(Category category)
+        {
+            try
+            {
+                var hrefList = new List<string>();
+                hrefList.Add(_urlHelper.Link(nameof(GetByIdCategory), new { id = category.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PatchByIdCategory), new { id = category.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PutByIdCategory), new { id = category.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(DeleteByIdCategory), new { id = category.Id }));
+
+                return hrefList;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

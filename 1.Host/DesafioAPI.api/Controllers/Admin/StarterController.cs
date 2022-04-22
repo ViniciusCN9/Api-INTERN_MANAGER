@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Hateoas.Containers;
 using DesafioAPI.api.Helpers;
 using DesafioAPI.application.DataTransferObjects;
 using DesafioAPI.application.Interfaces;
@@ -20,11 +21,15 @@ namespace DesafioAPI.api.Controllers.Admin
     public class StarterController : ControllerBase
     {
         private readonly IStarterService _starterService;
+        private readonly IUrlHelper _urlHelper;
+        private readonly HateoasHelper _hateoasHelper;
         private readonly FilesHelper _filesHelper;
 
-        public StarterController(IStarterService starterService, FilesHelper filesHelper)
+        public StarterController(IStarterService starterService, IUrlHelper urlHelper, HateoasHelper hateoasHelper, FilesHelper filesHelper)
         {
             _starterService = starterService;
+            _urlHelper = urlHelper;
+            _hateoasHelper = hateoasHelper;
             _filesHelper = filesHelper;
         }
 
@@ -34,7 +39,13 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var starters = _starterService.GetStarters();
-                return Ok(starters);
+                var startersWithLinks = new List<StarterContainer>();
+                foreach (var starter in starters)
+                {
+                    startersWithLinks.Add(_hateoasHelper.StarterGenerateLink(starter, GetUrlOfActions(starter)));
+                }
+
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -47,13 +58,14 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(GetByIdStarter))]
         public IActionResult GetByIdStarter([FromRoute] int id)
         {
             try
             {
                 var starter = _starterService.GetByIdStarter(id);
-                return Ok(starter);
+                var starterWithLinks = _hateoasHelper.StarterGenerateLink(starter, GetUrlOfActions(starter));
+                return Ok(starterWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -66,13 +78,19 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("Name/{name}")]
+        [Route("Name/{name}", Name = nameof(GetByNameStarter))]
         public IActionResult GetByNameStarter([FromRoute] string name)
         {
             try
             {
                 var starters = _starterService.GetByNameStarters(name);
-                return Ok(starters);
+                var startersWithLinks = new List<StarterContainer>();
+                foreach (var starter in starters)
+                {
+                    startersWithLinks.Add(_hateoasHelper.StarterGenerateLink(starter, GetUrlOfActions(starter)));
+                }
+
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -85,7 +103,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPost]
-        [Route("Upload/{id:int}")]
+        [Route("Upload/{id:int}", Name = nameof(UploadByIdPhotoStarter))]
         public IActionResult UploadByIdPhotoStarter([FromForm] FileUpload fileUpload, [FromRoute] int id)
         {
             try
@@ -124,7 +142,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpGet]
-        [Route("Photo/{id:int}")]
+        [Route("Photo/{id:int}", Name = nameof(PhotoByIdStarter))]
         public IActionResult PhotoByIdStarter([FromRoute] int id)
         {
             try
@@ -167,7 +185,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPatch]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PatchByIdStarter))]
         public IActionResult PatchByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -189,7 +207,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PutByIdStarter))]
         public IActionResult PutByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -214,7 +232,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(DeleteByIdStarter))]
         public IActionResult DeleteByIdStarter([FromRoute] int id)
         {
             try
@@ -233,10 +251,31 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
+        }
+
+        //-------------------- Internal Methods --------------------
+        private List<string> GetUrlOfActions(Starter starter)
+        {
+            try
+            {
+                var hrefList = new List<string>();
+                hrefList.Add(_urlHelper.Link(nameof(GetByIdStarter), new { id = starter.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(GetByNameStarter), new { name = starter.Name }));
+                hrefList.Add(_urlHelper.Link(nameof(UploadByIdPhotoStarter), new { id = starter.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PhotoByIdStarter), new { id = starter.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PatchByIdStarter), new { id = starter.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PutByIdStarter), new { id = starter.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(DeleteByIdStarter), new { id = starter.Id }));
+
+                return hrefList;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }        
     }
-
-    //-------------------- Swagger object bug --------------------
+    //-------------------- Temporary solution for Swagger IFormFile/Object bug --------------------
     public class FileUpload
     {
         public IFormFile photo { get; set; }

@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Hateoas.Containers;
+using DesafioAPI.api.Helpers;
 using DesafioAPI.application.DataTransferObjects;
 using DesafioAPI.application.Interfaces;
+using DesafioAPI.domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,10 +19,14 @@ namespace DesafioAPI.api.Controllers.Admin
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _accountService;
+        private readonly IUrlHelper _urlHelper;
+        private readonly HateoasHelper _hateoasHelper;
 
-        public AccountController(IAccountService accountService)
+        public AccountController(IAccountService accountService, IUrlHelper urlHelper, HateoasHelper hateoasHelper)
         {
             _accountService = accountService;
+            _urlHelper = urlHelper;
+            _hateoasHelper = hateoasHelper;
         }
 
         [HttpGet]
@@ -28,7 +35,13 @@ namespace DesafioAPI.api.Controllers.Admin
             try
             {
                 var accounts = _accountService.GetAccounts();
-                return Ok(accounts);
+                var accountsWithLinks = new List<AccountContainer>();
+                foreach (var account in accounts)
+                {
+                    accountsWithLinks.Add(_hateoasHelper.AccountGenerateLink(account, GetUrlOfActions(account)));
+                }
+                
+                return Ok(accountsWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -41,13 +54,14 @@ namespace DesafioAPI.api.Controllers.Admin
         }
         
         [HttpGet]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(GetByIdAccount))]
         public IActionResult GetByIdAccount([FromRoute] int id)
         {
             try
             {
                 var account = _accountService.GetByIdAccount(id);
-                return Ok(account);
+                var accountWithLinks = _hateoasHelper.AccountGenerateLink(account, GetUrlOfActions(account));
+                return Ok(accountWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -60,7 +74,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPatch]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PatchByIdAccount))]
         public IActionResult PatchByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -82,7 +96,7 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpPut]
-        [Route("{id:int}")]
+        [Route("{id:int}", Name = nameof(PutByIdAccount))]
         public IActionResult PutByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
         {
             if (!ModelState.IsValid)
@@ -107,8 +121,8 @@ namespace DesafioAPI.api.Controllers.Admin
         }
 
         [HttpDelete]
-        [Route("{id:int}")]
-        public IActionResult DeleteById([FromRoute] int id)
+        [Route("{id:int}", Name = nameof(DeleteByIdAccount))]
+        public IActionResult DeleteByIdAccount([FromRoute] int id)
         {
             try
             {
@@ -123,6 +137,26 @@ namespace DesafioAPI.api.Controllers.Admin
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
             }
+        }
+
+        //-------------------- Internal Methods --------------------
+        private List<string> GetUrlOfActions(Account account)
+        {
+            try
+            {
+                var hrefList = new List<string>();
+                hrefList.Add(_urlHelper.Link(nameof(GetByIdAccount), new { id = account.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PatchByIdAccount), new { id = account.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(PutByIdAccount), new { id = account.Id }));
+                hrefList.Add(_urlHelper.Link(nameof(DeleteByIdAccount), new { id = account.Id }));
+
+                return hrefList;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
+            
         }
     }
 }

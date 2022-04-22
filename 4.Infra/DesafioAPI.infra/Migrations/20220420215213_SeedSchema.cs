@@ -34,7 +34,7 @@ namespace DesafioAPI.infra.Migrations
             migrationBuilder.InsertData(
                 table: "Starters",
                 columns: new[] { "Id", "Name", "Cpf", "Abbreviation", "Email", "Photo", "CategoryId", "IsActive" },
-                values: new object[] { 1, "Leonardo da Vince", "74485295281", "love", "leonardo.vince@invalido.com", "1a0e54b8-love.jpg", 1, true});
+                values: new object[] { 1, "Leonardo da Vinci", "74485295281", "lovi", "leonardo.vinci@invalido.com", "1a0e54b8-love.jpg", 1, true});
 
             migrationBuilder.InsertData(
                 table: "Starters",

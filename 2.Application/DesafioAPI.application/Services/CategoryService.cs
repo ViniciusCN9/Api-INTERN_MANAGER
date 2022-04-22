@@ -103,7 +103,7 @@ namespace DesafioAPI.application.Services
             if (category is null)
                 throw new ArgumentException("Categoria não encontrada");
 
-            var starter = _starterRepository.GetStarters().First(e => e.Category.Equals(category));
+            var starter = _starterRepository.GetStarters().FirstOrDefault(e => e.Category.Id == category.Id);
             if (starter != null)
                 throw new Exception("Categoria não pode ser deletada pois contêm starters cadastrados");
 

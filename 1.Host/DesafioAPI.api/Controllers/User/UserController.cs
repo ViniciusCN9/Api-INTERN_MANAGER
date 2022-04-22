@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DesafioAPI.api.Hateoas.Containers;
 using DesafioAPI.api.Helpers;
 using DesafioAPI.application.Interfaces;
+using DesafioAPI.domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,12 +19,16 @@ namespace DesafioAPI.api.Controllers.User
     {
         private readonly IUserService _userService;
         private readonly IStarterService _starterService;
+        private readonly IUrlHelper _urlHelper;
+        private readonly HateoasHelper _hateoasHelper;
         private readonly FilesHelper _filesHelper;
 
-        public UserController(IUserService userService, IStarterService starterService, FilesHelper filesHelper)
+        public UserController(IUserService userService, IStarterService starterService, IUrlHelper urlHelper, HateoasHelper hateoasHelper, FilesHelper filesHelper)
         {
             _userService = userService;
             _starterService = starterService;
+            _urlHelper = urlHelper;
+            _hateoasHelper = hateoasHelper;
             _filesHelper = filesHelper;
         }
 
@@ -34,13 +40,16 @@ namespace DesafioAPI.api.Controllers.User
             {
                 var starters = _starterService.GetStarters();
                 var startersActive = _userService.VerifyStartersIsActive(starters);
-                var startersHiddenInfo = new List<object>();
+
+                var startersWithLinks = new List<object>();
                 foreach (var starter in startersActive)
                 {
-                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                    var starterContainer = _hateoasHelper.UserGenerateLink(starter, GetUrlOfActions(starter));
+                    var starterHiddenInfo = _userService.HideStarterInformations(starterContainer.Starter);
+                    startersWithLinks.Add(new { starter = starterHiddenInfo, links = starterContainer.Links});
                 }
 
-                return Ok(startersHiddenInfo);
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -53,20 +62,22 @@ namespace DesafioAPI.api.Controllers.User
         }
 
         [HttpGet]
-        [Route("Starter/{name}")]
+        [Route("Starter/{name}", Name = nameof(GetByNameStarters))]
         public IActionResult GetByNameStarters([FromRoute] string name)
         {
             try
             {
                 var starters = _starterService.GetByNameStarters(name);
                 var startersActive = _userService.VerifyStartersIsActive(starters);
-                var startersHiddenInfo = new List<object>();
+                var startersWithLinks = new List<object>();
                 foreach (var starter in startersActive)
                 {
-                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                    var starterContainer = _hateoasHelper.UserGenerateLink(starter, GetUrlOfActions(starter));
+                    var starterHiddenInfo = _userService.HideStarterInformations(starterContainer.Starter);
+                    startersWithLinks.Add(new { starter = starterHiddenInfo, links = starterContainer.Links});
                 }
 
-                return Ok(startersHiddenInfo);
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -79,7 +90,7 @@ namespace DesafioAPI.api.Controllers.User
         }
 
         [HttpGet]
-        [Route("Starter/Photo/{name}")]
+        [Route("Starter/Photo/{name}", Name = nameof(PhotoByNameStarter))]
         public IActionResult PhotoByNameStarter([FromRoute] string name)
         {
             try
@@ -107,13 +118,16 @@ namespace DesafioAPI.api.Controllers.User
             {
                 var starters = _starterService.GetStarters();
                 var startersActive = _userService.VerifyStartersIsActive(starters).OrderBy(e => e.Name);
-                var startersHiddenInfo = new List<object>();
+
+                var startersWithLinks = new List<object>();
                 foreach (var starter in startersActive)
                 {
-                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                    var starterContainer = _hateoasHelper.UserGenerateLink(starter, GetUrlOfActions(starter));
+                    var starterHiddenInfo = _userService.HideStarterInformations(starterContainer.Starter);
+                    startersWithLinks.Add(new { starter = starterHiddenInfo, links = starterContainer.Links});
                 }
 
-                return Ok(startersHiddenInfo);
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -133,13 +147,16 @@ namespace DesafioAPI.api.Controllers.User
             {
                 var starters = _starterService.GetStarters();
                 var startersActive = _userService.VerifyStartersIsActive(starters).OrderByDescending(e => e.Name);
-                var startersHiddenInfo = new List<object>();
+
+                var startersWithLinks = new List<object>();
                 foreach (var starter in startersActive)
                 {
-                    startersHiddenInfo.Add(_userService.HideStarterInformations(starter));  
+                    var starterContainer = _hateoasHelper.UserGenerateLink(starter, GetUrlOfActions(starter));
+                    var starterHiddenInfo = _userService.HideStarterInformations(starterContainer.Starter);
+                    startersWithLinks.Add(new { starter = starterHiddenInfo, links = starterContainer.Links});
                 }
 
-                return Ok(startersHiddenInfo);
+                return Ok(startersWithLinks);
             }
             catch (ArgumentException e)
             {
@@ -148,6 +165,23 @@ namespace DesafioAPI.api.Controllers.User
             catch (Exception e)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, e.Message);
+            }
+        }
+
+        //-------------------- Internal Methods --------------------
+        private List<string> GetUrlOfActions(Starter starter)
+        {
+            try
+            {
+                var hrefList = new List<string>();
+                hrefList.Add(_urlHelper.Link(nameof(GetByNameStarters), new { name = starter.Name }));
+                hrefList.Add(_urlHelper.Link(nameof(PhotoByNameStarter), new { name = starter.Name }));
+
+                return hrefList;
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
             }
         }
     }
