@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using DesafioAPI.api.Hateoas.Containers;
 using DesafioAPI.api.Helpers;
 using DesafioAPI.application.Interfaces;
 using DesafioAPI.domain.Entities;

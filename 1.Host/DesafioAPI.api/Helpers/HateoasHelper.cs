@@ -1,11 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using DesafioAPI.api.Hateoas;
 using DesafioAPI.api.Hateoas.Containers;
 using DesafioAPI.domain.Entities;
-using Microsoft.AspNetCore.Mvc;
 
 namespace DesafioAPI.api.Helpers
 {
