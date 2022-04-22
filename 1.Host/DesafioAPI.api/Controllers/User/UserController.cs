@@ -30,6 +30,11 @@ namespace DesafioAPI.api.Controllers.User
             _filesHelper = filesHelper;
         }
 
+        /// <summary>
+        /// Lista starters ativos.
+        /// </summary>
+        /// <returns>Starters cadastrados ativos</returns>
+        /// <response code="200"> Retorna starters cadastrados ativos</response>
         [HttpGet]
         [Route("Starter")]
         public IActionResult GetStarters()
@@ -59,6 +64,11 @@ namespace DesafioAPI.api.Controllers.User
             }
         }
 
+        /// <summary>
+        /// Lista starters ativos que contêm o nome informado.
+        /// </summary>
+        /// <returns>Starters cadastrados ativos que contêm o nome informado</returns>
+        /// <response code="200"> Retorna starters cadastrados ativos que contêm o nome informado</response>
         [HttpGet]
         [Route("Starter/{name}", Name = nameof(GetByNameStarters))]
         public IActionResult GetByNameStarters([FromRoute] string name)
@@ -87,14 +97,20 @@ namespace DesafioAPI.api.Controllers.User
             }
         }
 
+        /// <summary>
+        /// Foto do starter ativo informado.
+        /// </summary>
+        /// <returns>Exibição da foto do starter ativo</returns>
+        /// <response code="200"> Retorna exibição da foto do starter ativo</response>
         [HttpGet]
         [Route("Starter/Photo/{name}", Name = nameof(PhotoByNameStarter))]
         public IActionResult PhotoByNameStarter([FromRoute] string name)
         {
             try
             {
-                var starter = _starterService.GetByNameStarters(name).First(e => e.Name == name);
-                var bytes = _filesHelper.ShowImageFromRoot(starter);
+                var starters = _starterService.GetByNameStarters(name);
+                var starterActive = _userService.VerifyStartersIsActive(starters).First(e => e.Name == name);
+                var bytes = _filesHelper.ShowImageFromRoot(starterActive);
 
                     return File(bytes, "image/png");
             }
@@ -108,6 +124,11 @@ namespace DesafioAPI.api.Controllers.User
             }
         }
 
+        /// <summary>
+        /// Lista starters ativos em ordem crescente por nome.
+        /// </summary>
+        /// <returns>Lista de starters ativos em ordem crescente por nome</returns>
+        /// <response code="200"> Retorna lista de starters ativos em ordem crescente por nome</response>
         [HttpGet]
         [Route("Starter/Ascending")]
         public IActionResult GetAscendingStarters()
@@ -137,6 +158,11 @@ namespace DesafioAPI.api.Controllers.User
             }
         }
 
+        /// <summary>
+        /// Lista starters ativos em ordem decrescente por nome.
+        /// </summary>
+        /// <returns>Lista de starters ativos em ordem decrescente por nome</returns>
+        /// <response code="200"> Retorna lista de starters ativos em ordem decrescente por nome</response>
         [HttpGet]
         [Route("Starter/Descending")]
         public IActionResult GetDescendingStarters()

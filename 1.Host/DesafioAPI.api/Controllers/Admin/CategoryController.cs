@@ -27,6 +27,11 @@ namespace DesafioAPI.api.Controllers.Admin
             _hateoasHelper = hateoasHelper;
         }
 
+        /// <summary>
+        /// Lista categorias.
+        /// </summary>
+        /// <returns>Categorias cadastrados</returns>
+        /// <response code="200"> Retorna categorias cadastradas</response>
         [HttpGet]
         public IActionResult GetCategories()
         {
@@ -51,6 +56,11 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Categoria com o id informado.
+        /// </summary>
+        /// <returns>Categoria com o id informado</returns>
+        /// <response code="200"> Retorna categoria com o id informado</response>
         [HttpGet]
         [Route("{id:int}", Name = nameof(GetByIdCategory))]
         public IActionResult GetByIdCategory([FromRoute] int id)
@@ -71,6 +81,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Cadastra uma categoria.
+        /// </summary>
+        /// <response code="200"> Categoria cadastrada com sucesso</response>
         [HttpPost]
         public IActionResult PostCategory([FromBody] CategoryCreateDto categoryDto)
         {
@@ -93,6 +107,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza dados parciais da categoria com o id informado.
+        /// </summary>
+        /// <response code="200"> Categoria atualizada com sucesso</response>
         [HttpPatch]
         [Route("{id:int}", Name = nameof(PatchByIdCategory))]
         public IActionResult PatchByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
@@ -115,6 +133,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza todos os dados da categoria com o id informado.
+        /// </summary>
+        /// <response code="200"> Categoria atualizada com sucesso</response>
         [HttpPut]
         [Route("{id:int}", Name = nameof(PutByIdCategory))]
         public IActionResult PutByIdCategory([FromBody] CategoryUpdateDto categoryDto, [FromRoute] int id)
@@ -140,6 +162,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Deleta a categoria com o id informado.
+        /// </summary>
+        /// <response code="200"> Categoria deletada com sucesso</response>
         [HttpDelete]
         [Route("{id:int}",  Name = nameof(DeleteByIdCategory))]
         public IActionResult DeleteByIdCategory([FromRoute] int id)

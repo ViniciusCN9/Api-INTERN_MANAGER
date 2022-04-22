@@ -21,6 +21,27 @@ namespace DesafioAPI.api.Controllers
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Realiza login.
+        /// </summary>
+        /// <remarks>
+        /// Example:
+        ///
+        ///     Admin
+        ///     {
+        ///        "username": "Admin",
+        ///        "password": "Gft@1234"
+        ///     }
+        ///     
+        ///     User
+        ///     {
+        ///        "username": "User",
+        ///        "password": "Gft@1234"
+        ///     }
+        ///
+        /// </remarks>
+        /// <returns>Token para acesso correspondente a função da conta</returns>
+        /// <response code="200"> Retorna Token para acesso correspondente a função da conta</response>
         [HttpPost]
         [Route("Login")]
         public IActionResult PostLogin([FromBody] AccountLoginDto login)
@@ -49,6 +70,11 @@ namespace DesafioAPI.api.Controllers
             }
         }
 
+        /// <summary>
+        /// Cria uma conta.
+        /// </summary>
+        /// <returns>Usuário e senha para login</returns>
+        /// <response code="200"> Retorna usuário e senha para login</response>
         [HttpPost]
         [Route("Register")]
         public IActionResult PostRegister([FromBody] AccountRegisterDto register)

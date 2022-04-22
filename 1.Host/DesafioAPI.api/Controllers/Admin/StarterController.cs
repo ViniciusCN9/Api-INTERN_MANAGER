@@ -29,6 +29,11 @@ namespace DesafioAPI.api.Controllers.Admin
             _filesHelper = filesHelper;
         }
 
+        /// <summary>
+        /// Lista starters.
+        /// </summary>
+        /// <returns>Starters cadastrados</returns>
+        /// <response code="200"> Retorna starters cadastrados</response>
         [HttpGet]
         public IActionResult GetStarters()
         {
@@ -53,6 +58,11 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Starter com o id informado.
+        /// </summary>
+        /// <returns>Starter com o id informado</returns>
+        /// <response code="200"> Retorna starter com o id informado</response>
         [HttpGet]
         [Route("{id:int}", Name = nameof(GetByIdStarter))]
         public IActionResult GetByIdStarter([FromRoute] int id)
@@ -73,6 +83,12 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+
+        /// <summary>
+        /// Starter com o nome informado.
+        /// </summary>
+        /// <returns>Starter com o nome informado</returns>
+        /// <response code="200"> Retorna Starter com o nome informado</response>
         [HttpGet]
         [Route("Name/{name}", Name = nameof(GetByNameStarter))]
         public IActionResult GetByNameStarter([FromRoute] string name)
@@ -98,6 +114,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Upload de foto para o starter com o id informado.
+        /// </summary>
+        /// <response code="200"> foto atribuída ao starter</response>
         [HttpPost]
         [Route("Upload/{id:int}", Name = nameof(UploadByIdPhotoStarter))]
         public IActionResult UploadByIdPhotoStarter([FromForm] FileUpload fileUpload, [FromRoute] int id)
@@ -137,6 +157,11 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Foto do starter com o id informado.
+        /// </summary>
+        /// <returns>Exibição da foto do Starter com o id informado</returns>
+        /// <response code="200"> Retorna exibição da foto do Starter com o id informado</response>
         [HttpGet]
         [Route("Photo/{id:int}", Name = nameof(PhotoByIdStarter))]
         public IActionResult PhotoByIdStarter([FromRoute] int id)
@@ -158,6 +183,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Cadastra um starter.
+        /// </summary>
+        /// <response code="200"> Starter cadastrado com sucesso</response>
         [HttpPost]
         public IActionResult PostStarter([FromBody] StarterCreateDto starterDto)
         {
@@ -180,6 +209,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza dados parciais do starter com o id informado.
+        /// </summary>
+        /// <response code="200"> Starter atualizado com sucesso</response>
         [HttpPatch]
         [Route("{id:int}", Name = nameof(PatchByIdStarter))]
         public IActionResult PatchByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
@@ -202,6 +235,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza todos os dados do starter com o id informado.
+        /// </summary>
+        /// <response code="200"> Starter atualizado com sucesso</response>
         [HttpPut]
         [Route("{id:int}", Name = nameof(PutByIdStarter))]
         public IActionResult PutByIdStarter([FromBody] StarterUpdateDto starterDto, [FromRoute] int id)
@@ -227,6 +264,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Deleta o starter com o id informado.
+        /// </summary>
+        /// <response code="200"> Starter deletado com sucesso</response>
         [HttpDelete]
         [Route("{id:int}", Name = nameof(DeleteByIdStarter))]
         public IActionResult DeleteByIdStarter([FromRoute] int id)

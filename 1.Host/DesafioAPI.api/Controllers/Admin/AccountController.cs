@@ -27,6 +27,11 @@ namespace DesafioAPI.api.Controllers.Admin
             _hateoasHelper = hateoasHelper;
         }
 
+        /// <summary>
+        /// Lista contas.
+        /// </summary>
+        /// <returns>Contas cadastrados</returns>
+        /// <response code="200"> Retorna contas cadastradas</response>
         [HttpGet]
         public IActionResult GetAccounts()
         {
@@ -51,6 +56,11 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
         
+        /// <summary>
+        /// Conta com o id informado.
+        /// </summary>
+        /// <returns>Conta com o id informado</returns>
+        /// <response code="200"> Retorna conta com o id informado</response>
         [HttpGet]
         [Route("{id:int}", Name = nameof(GetByIdAccount))]
         public IActionResult GetByIdAccount([FromRoute] int id)
@@ -71,6 +81,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza dados parciais da conta com o id informado.
+        /// </summary>
+        /// <response code="200"> Conta atualizada com sucesso</response>
         [HttpPatch]
         [Route("{id:int}", Name = nameof(PatchByIdAccount))]
         public IActionResult PatchByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
@@ -93,6 +107,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Atualiza todos os dados da conta com o id informado.
+        /// </summary>
+        /// <response code="200"> Conta atualizada com sucesso</response>
         [HttpPut]
         [Route("{id:int}", Name = nameof(PutByIdAccount))]
         public IActionResult PutByIdAccount([FromBody] AccountDto accountDto, [FromRoute] int id)
@@ -118,6 +136,10 @@ namespace DesafioAPI.api.Controllers.Admin
             }
         }
 
+        /// <summary>
+        /// Deleta a conta com o id informado.
+        /// </summary>
+        /// <response code="200"> Conta deletada com sucesso</response>
         [HttpDelete]
         [Route("{id:int}", Name = nameof(DeleteByIdAccount))]
         public IActionResult DeleteByIdAccount([FromRoute] int id)

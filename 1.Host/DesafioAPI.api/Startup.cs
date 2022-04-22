@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using DesafioAPI.api.Helpers;
 using DesafioAPI.application.Interfaces;
@@ -62,6 +65,10 @@ namespace DesafioAPI.api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DesafioAPI.api", Version = "v1" });
 
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme() 
                 { 
                     Name = "Authorization", 
@@ -69,7 +76,7 @@ namespace DesafioAPI.api
                     Scheme = "Bearer", 
                     BearerFormat = "JWT", 
                     In = ParameterLocation.Header, 
-                    Description = "JWT Authorization header using the Bearer scheme." 
+                    Description = "Input: 'Bearer TOKEN_GERADO'" 
                 }); 
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement 
                 { 
