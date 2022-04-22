@@ -45,7 +45,7 @@ Usuários com a permissão de admin podem:
 
 Usuários com a permissão de admin e user podem:
 
-- Ver starter e e sua foto;
+- Ver starter e sua foto;
 - Listar starters por ordem crescente pelo nome;
 - Listar starters por ordem decrescente pelo nome.
 
