@@ -1,4 +1,4 @@
-# Gerenciador de eventos BLUE RIDGE
+# Gerenciador de estagiários INTERN_MANAGER
 
 Projeto simulador de uma api para gerenciamento de estagiários.
 
