@@ -33,14 +33,14 @@ Na camada de Host alterar o  arquivo *appsettings.json* -> Propriedade *"Connect
 
 Usuários anônimos podem:
 
--Fazer login;
--Criar conta.
+- Fazer login;
+- Criar conta.
 
 Usuários com a permissão de admin podem:
 
 - Ver, alterar e deletar outras contas;
 - Ver, Cadastrar, alterar e deletar categorias;
-- ver, Cadastrar, alterar e deletar starters;
+- Ver, Cadastrar, alterar e deletar starters;
 - Fazer o upload de foto para um starter.
 
 Usuários com a permissão de admin e user podem:
