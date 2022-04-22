@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DesafioAPI.domain.Entities;
+using DesafioAPI.domain.Entities.Base;
 using DesafioAPI.domain.Repositories;
 using DesafioAPI.infra.Database.Context;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,7 @@ namespace DesafioAPI.infra.Database.Repositories
             List<Account> accounts;
             try
             {
-                accounts = _context.Accounts.AsNoTracking().Where(e => e.Role == 0).ToList();
+                accounts = _context.Accounts.AsNoTracking().Where(e => e.Role == Role.USER).ToList();
             }
             catch
             {
@@ -36,7 +37,7 @@ namespace DesafioAPI.infra.Database.Repositories
             Account account;
             try
             {
-                account = _context.Accounts.Where(e => e.Role == 0).First(e => e.Id == id);
+                account = _context.Accounts.Where(e => e.Role == Role.USER).First(e => e.Id == id);
             }
             catch
             {

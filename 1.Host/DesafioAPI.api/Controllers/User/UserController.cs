@@ -98,7 +98,7 @@ namespace DesafioAPI.api.Controllers.User
         }
 
         /// <summary>
-        /// Foto do starter ativo informado.
+        /// Foto do starter ativo por nome informado.
         /// </summary>
         /// <returns>Exibição da foto do starter ativo</returns>
         /// <response code="200"> Retorna exibição da foto do starter ativo</response>

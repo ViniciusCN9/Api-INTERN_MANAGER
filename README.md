@@ -11,6 +11,12 @@ Projeto simulador de uma api para gerenciamento de estagiários.
 
 ## Configurações iniciais
 
+### Comandos
+
+- dotnet restore
+- dotnet ef database update --project .\1.Host\DesafioAPI.api\DesafioAPI.api.csproj
+- dotnet watch run --project .\1.Host\DesafioAPI.api\DesafioAPI.api.csproj
+
 ### Senha de usuário do banco de dados
 
 Na camada de Host alterar o  arquivo *appsettings.json* -> Propriedade *"ConnectionStrings":*
