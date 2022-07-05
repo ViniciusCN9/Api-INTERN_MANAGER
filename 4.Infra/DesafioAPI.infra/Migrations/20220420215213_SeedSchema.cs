@@ -9,7 +9,7 @@ namespace DesafioAPI.infra.Migrations
             migrationBuilder.InsertData(
                 table: "Accounts",
                 columns: new[] { "Id", "Username", "Password", "Email", "Role", "IsActive" },
-                values: new object[] { 1, "Admin", "Gft@1234", "vinicius.escobedo@gft.com", 0, true});
+                values: new object[] { 1, "Admin", "Gft@1234", "vinicius.escobedo@invalido.com", 0, true});
 
             migrationBuilder.InsertData(
                 table: "Accounts",
