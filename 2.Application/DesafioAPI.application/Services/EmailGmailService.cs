@@ -22,7 +22,7 @@ namespace DesafioAPI.application.Services
                 SmtpClient smtpClient = new SmtpClient("smtp.gmail.com", 587);
 
                 smtpClient.UseDefaultCredentials = false;
-                smtpClient.Credentials = new NetworkCredential("vinicius.desafioapi@gmail.com", "desafioapi123");
+                smtpClient.Credentials = new NetworkCredential("", "");
 
                 smtpClient.EnableSsl = true;
                 smtpClient.Send(mailMessage);
